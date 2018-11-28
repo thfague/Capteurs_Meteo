@@ -1,28 +1,49 @@
-package sample;
+package Vue;
 
+import Class_Metier.Capteur;
 import Class_Metier.Digital;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 
-public class Controller {
+import static jdk.nashorn.internal.objects.ArrayBufferView.length;
+
+public class ControllerAccueil {
     @FXML
     GridPane gridAccueil;
     Text textCapteur = new Text();
 
+
+
     @FXML
     public void initialize (){
-        AjoutCapteur("Capteur 1", 20, 0);
-        AjoutCapteur("Capteur 2", 6, 1);
-        AjoutCapteur("Capteur 3", 25, 2);
+        List<Digital> l = new ArrayList<Digital>();
+        l.add(new Digital(20));
+        l.add(new Digital(20));
+        l.add(new Digital(20));
+
+        ObservableList<Digital> olCapteur = FXCollections.observableList(l);
+        ListView<Digital> listCapteur = new ListView<Digital>(olCapteur);
+        ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
+        listCapteur.itemsProperty().bind(lp);
+        gridAccueil.add(lp, 0,1);
+
         gridAccueil.add(textCapteur, 1, 0);
     }
 

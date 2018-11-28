@@ -1,4 +1,4 @@
-package sample;
+package Vue;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;

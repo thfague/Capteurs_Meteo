@@ -6,4 +6,8 @@ public abstract class Capteur {
     public Capteur(float valeur) {
         this.valeur = valeur;
     }
+
+    public float getValeur() {
+        return valeur;
+    }
 }

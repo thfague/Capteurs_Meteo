@@ -1,4 +1,4 @@
-package sample;
+package Vue;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Fenêtre d'accueil
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FenetreAccueil.fxml"));
         primaryStage.setTitle("Meteo");
         primaryStage.setScene(new Scene(root, 400, 325));
         primaryStage.show();
