@@ -1,6 +1,4 @@
-package sample;
-
-import Class_Metier.Capteur;
+package Class_Metier;
 
 public class Digital extends Capteur {
 

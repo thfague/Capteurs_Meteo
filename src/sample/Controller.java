@@ -1,5 +1,6 @@
 package sample;
 
+import Class_Metier.Digital;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,71 +15,81 @@ import javafx.event.EventHandler;
 
 public class Controller {
     @FXML
-    GridPane gridAcceuil;
-
-        //Liste des capteurs
-        /*List<Capteur> listCapteur = new ArrayList<>();
-        listCapteur.add(new Digital(20));
-        listCapteur.add(new Digital(6));
-        listCapteur.add(new Digital(25));*/
-        //Création et ajout d'un bouton pour chaque capteur
-        /*for (int i = 0; i<listCapteur.size(); i++) {
-            Button buttonCapteur = new Button("Capteur " + (i + 1));
-            buttonCapteur.onActionProperty();
-            grid.add(buttonCapteur,0,i);
-        }*/
+    GridPane gridAccueil;
+    Text textCapteur = new Text();
 
     @FXML
-    public void ClickCapteur1(ActionEvent actionEvent) {
-        Text text = new Text("Capteur 1");
-        gridAcceuil.add(text, 1, 0 );
-        AffichageBouton();
+    public void initialize (){
+        AjoutCapteur("Capteur 1", 20, 0);
+        AjoutCapteur("Capteur 2", 6, 1);
+        AjoutCapteur("Capteur 3", 25, 2);
+        gridAccueil.add(textCapteur, 1, 0);
+    }
+
+    public void AjoutCapteur(String nom, float valeur, int row) {
+        Digital d = new Digital(valeur);
+        Button buttonCapteur = new Button();
+        buttonCapteur.setText(nom);
+        buttonCapteur.setId("capteur" + (row + 1));
+        buttonCapteur.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ClickCapteur(buttonCapteur.getId(), valeur);
+            }
+        });
+        gridAccueil.add(buttonCapteur, 0, row);
     }
 
     @FXML
-    public void ClickCapteur2(ActionEvent actionEvent) {
-        Text text = new Text("Capteur 2");
-        gridAcceuil.add(text, 1, 0 );
-        AffichageBouton();
-    }
-
-    @FXML
-    public void ClickCapteur3(ActionEvent actionEvent) {
-        Text text = new Text("Capteur 3");
-        gridAcceuil.add(text, 1, 0 );
-        AffichageBouton();
+    public void ClickCapteur(String id, float valeur) {
+        textCapteur.setText(id);
+        AffichageBouton(valeur);
     }
 
     //Création et ajout d'un bouton pour chaque type d'affichage
-    public void AffichageBouton() {
+    public void AffichageBouton(float valeur) {
         Button buttonDigit = new Button("Affichage digital");
-        gridAcceuil.add(buttonDigit, 1, 1 );
-        /*buttonDigit.setOnAction(new EventHandler<ActionEvent>() {
-                                    @Override public void handle(ActionEvent e) {
-                                        NewWindow("digital.fxml", "Affichage format Digital");
-                                    }
-                                });*/
+        gridAccueil.add(buttonDigit, 1, 1 );
+        buttonDigit.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                OpenDigit(valeur);
+            }
+        });
         Button buttonThermo = new Button("Affichage par thermomètre");
-        gridAcceuil.add(buttonThermo, 1, 2 );
+        gridAccueil.add(buttonThermo, 1, 2 );
+        buttonThermo.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                OpenThermo(valeur);
+            }
+        });
         Button buttonImg = new Button("Affichage imagé");
-        gridAcceuil.add(buttonImg, 1, 3 );
+        gridAccueil.add(buttonImg, 1, 3 );
+        buttonImg.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                OpenImg(valeur);
+            }
+        });
     }
 
-    public void OpenDigit() {
-
+    public void OpenDigit(float valeur) {
+        NewWindow("affichageDigital.fxml", "Affichage format digital", valeur);
     }
 
-    public void OpenThermo() {
-        NewWindow("thermo.fxml", "Affichage format Thermomètre");
+    public void OpenThermo(float valeur) {
+        NewWindow("affichageThermo.fxml", "Affichage format thermomètre", valeur);
     }
 
-    public void OpenImg() {
-        NewWindow("imgMeteo.fxml", "Affichage format Image");
+    public void OpenImg(float valeur) {
+        NewWindow("affichageImgMeteo.fxml", "Affichage format image", valeur);
     }
 
-    public void NewWindow(String nameFile, String title)
+    public void NewWindow(String nameFile, String title, float valeur)
     {
         try {
+
             Parent root = FXMLLoader.load(getClass().getResource(nameFile));
             Stage stage = new Stage();
             stage.setTitle(title);

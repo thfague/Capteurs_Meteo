@@ -1,19 +1,5 @@
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.GridPane?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.text.TextFlow?>
-<?import javafx.scene.text.Text?>
-
-<GridPane fx:id="gridAcceuil" fx:controller="sample.Controller"
+<GridPane fx:id="gridAccueil" fx:controller="sample.Controller"
           xmlns:fx="http://javafx.com/fxml" hgap="10" vgap="0">
-    <Button text="Capteur 1" onAction="#ClickCapteur1" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-    <Button text="Capteur 2" onAction="#ClickCapteur2" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-    <Button text="Capteur 3" onAction="#ClickCapteur3" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-
-    <!--<Button text="Affichage digital" onAction="#ClickAffichageDigit" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-    <Button text="Affichage imagé" onAction="#ClickAffichageImg" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-    <Button text="Affichage par thermomètre" onAction="#ClickAffichageThermo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>-->
 </GridPane>
