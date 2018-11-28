@@ -42,7 +42,7 @@ public class ControllerAccueil {
         ListView<Digital> listCapteur = new ListView<Digital>(olCapteur);
         ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
         listCapteur.itemsProperty().bind(lp);
-        gridAccueil.add(lp, 0,1);
+        //gridAccueil.add(lp, 0,1);
 
         gridAccueil.add(textCapteur, 1, 0);
     }
