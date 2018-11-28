@@ -15,6 +15,6 @@ Semaine 2:
 *Tous les capteurs effectuent leur tâche en parallèle.
 *Chaque capteur possède son algorithme de génération de valeur (qui pourra être modifié au cours du programme).
 *3 algos =/= pour l'instant
-    -aléatoire
-    -aléatoire borné
-    -à fenêtre glissante
+    -aléatoire [-273,15;+inf] (zero absolu -> infini)
+    -aléatoire borné [10;30]
+    -à fenêtre glissante [-2;+2]
