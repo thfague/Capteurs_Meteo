@@ -1,20 +1,21 @@
 package Vue;
 
+import Class_Metier.Digital;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 public class AffichageDigital {
-
-    /*@FXML
-    GridPane gridDigit;
+    @FXML
+    Text NomCapteur;
 
     @FXML
-    public void initialize (float valeur){
-        javafx.scene.control.TextField f = new TextField();
-        gridDigit.add(f, 0,1);
-        String s = Float.toString(valeur);
-        f.setText(s);
+    TextField ValeurCapteur;
 
-    }*/
+    @FXML
+    public void initialize (Digital d){
+        NomCapteur.setText(d.getNom());
+        ValeurCapteur.setText("d.getValeur()");
+    }
 }
