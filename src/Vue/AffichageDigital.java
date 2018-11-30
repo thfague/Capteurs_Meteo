@@ -6,7 +6,7 @@ import javafx.scene.layout.GridPane;
 
 public class AffichageDigital {
 
-    @FXML
+    /*@FXML
     GridPane gridDigit;
 
     @FXML
@@ -16,5 +16,5 @@ public class AffichageDigital {
         String s = Float.toString(valeur);
         f.setText(s);
 
-    }
+    }*/
 }

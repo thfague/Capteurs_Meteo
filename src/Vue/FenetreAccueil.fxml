@@ -4,5 +4,4 @@
 <GridPane fx:id="gridAccueil" fx:controller="Vue.ControllerAccueil"
           xmlns:fx="http://javafx.com/fxml" hgap="10" vgap="0">
 
-    </ListView>
 </GridPane>

@@ -19,3 +19,11 @@ Semaine 2:
     -aléatoire borné [10;30]
     -à fenêtre glissante [-2;+2]
 
+
+
+Ce que le prof m'a dis pour l'affichage/personnalisation d'une ListView:
+	-Ne pas faire l'affichage avec le toString ! (-> toString plus pour debugger)
+	-Chaque ligne de la ListView est une ListCell.
+	-Elle est personnalisable grâce a: nomlisteview.setCellFactory(...)
+	-La personnalisation ce fait avec updateItem(...) de la ListCell.
+(Voir javadoc)

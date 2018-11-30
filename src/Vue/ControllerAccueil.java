@@ -9,20 +9,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
+import javafx.util.Callback;
 
-import static jdk.nashorn.internal.objects.ArrayBufferView.length;
 
 public class ControllerAccueil {
     @FXML
@@ -33,18 +36,38 @@ public class ControllerAccueil {
 
     @FXML
     public void initialize (){
-        List<Digital> l = new ArrayList<Digital>();
+        List<Digital> l = new ArrayList<>();
         l.add(new Digital(20));
-        l.add(new Digital(20));
-        l.add(new Digital(20));
+        l.add(new Digital(10));
+        l.add(new Digital(14));
 
         ObservableList<Digital> olCapteur = FXCollections.observableList(l);
-        ListView<Digital> listCapteur = new ListView<Digital>(olCapteur);
+        ListView<Digital> listCapteur = new ListView<>(olCapteur);
         ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
         listCapteur.itemsProperty().bind(lp);
-        //gridAccueil.add(lp, 0,1);
 
-        gridAccueil.add(textCapteur, 1, 0);
+        /*******************************Ce que j'ai fais (en gros)********************************/
+        listCapteur.setCellFactory(new Callback<ListView<Digital>, ListCell<Digital>>() {
+            @Override
+            public ListCell<Digital> call(ListView<Digital> param) {
+                return new DigitalFormatCell();
+            }
+        });
+
+        //Faire une classe à part pour ce bouton je pense(j'ai pas eut le temps)
+        Button ajoutCapteurButton = new Button("Ajouter un capteur");
+        ajoutCapteurButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Random r = new Random();
+                float random = 10 + r.nextFloat() * (30 - 10);
+                l.add(new Digital(random));
+            }
+        });
+
+        gridAccueil.add(ajoutCapteurButton,0,1);
+        gridAccueil.add(listCapteur, 0, 0);
+        /***********************************************************************/
     }
 
     public void AjoutCapteur(String nom, float valeur, int row) {
@@ -58,7 +81,7 @@ public class ControllerAccueil {
                 ClickCapteur(buttonCapteur.getId(), valeur);
             }
         });
-        gridAccueil.add(buttonCapteur, 0, row);
+        gridAccueil.add(buttonCapteur, 0, 1);
     }
 
     @FXML

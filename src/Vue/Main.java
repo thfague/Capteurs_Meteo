@@ -13,7 +13,7 @@ public class Main extends Application {
         //Fenêtre d'accueil
         Parent root = FXMLLoader.load(getClass().getResource("FenetreAccueil.fxml"));
         primaryStage.setTitle("Meteo");
-        primaryStage.setScene(new Scene(root, 400, 325));
+        primaryStage.setScene(new Scene(root, 600, 350));
         primaryStage.show();
     }
 
