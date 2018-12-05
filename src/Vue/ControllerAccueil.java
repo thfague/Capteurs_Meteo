@@ -27,6 +27,7 @@ import javafx.util.Callback;
 public class ControllerAccueil {
     @FXML
     GridPane gridAccueil;
+
     Text textCapteur = new Text();
     List<Digital> l = new ArrayList<>();
     GridPane gridAffich = new GridPane();
@@ -40,8 +41,8 @@ public class ControllerAccueil {
 
         ObservableList<Digital> olCapteur = FXCollections.observableList(l);
         ListView<Digital> listCapteur = new ListView<>(olCapteur);
-        ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
-        listCapteur.itemsProperty().bind(lp);
+        //ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
+       // listCapteur.itemsProperty().bind(lp);
 
         listCapteur.setCellFactory(new Callback<ListView<Digital>, ListCell<Digital>>() {
             @Override
@@ -57,7 +58,7 @@ public class ControllerAccueil {
 
 
         //Faire une classe à part pour ce bouton je pense(j'ai pas eut le temps)
-        Button ajoutCapteurButton = new Button("Ajouter un capteur");
+        /*Button ajoutCapteurButton = new Button("Ajouter un capteur");
         ajoutCapteurButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -66,11 +67,11 @@ public class ControllerAccueil {
                 l.add(new Digital(random, "?"));
             }
         });
-
+*/
         gridAccueil.add(gridAffich, 1, 0);
         gridAccueil.add(listCapteur, 0, 0);
         gridAffich.add(textCapteur,0,0);
-        gridAccueil.add(ajoutCapteurButton,0,1);
+        //gridAccueil.add(ajoutCapteurButton,0,1);
     }
 
     //Création et ajout d'un bouton pour chaque type d'affichage
@@ -105,8 +106,20 @@ public class ControllerAccueil {
     public void NewWindow(String nameFile, String title, Digital d)
     {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(nameFile));
-            //AffichageDigital.initialize(d);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(nameFile));
+            Parent root = loader.load();
+            if(nameFile.equals("affichageDigital.fxml")) {
+                AffichageDigital afd = loader.getController();
+                afd.setDig(d);
+            }
+            if(nameFile.equals("affichageThermo.fxml")) {
+                AffichageThermo aft = loader.getController();
+               // aft.setTherm(d);
+            }
+            if(nameFile.equals("affichageImgMeteo.fxml")) {
+                AffichageImgMeteo afi = loader.getController();
+                //afi.setImg(d);
+            }
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root, 400, 275));

@@ -1,6 +1,9 @@
 package Vue;
 
 import Class_Metier.Digital;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -8,14 +11,15 @@ import javafx.scene.text.Text;
 
 public class AffichageDigital {
     @FXML
-    Text NomCapteur;
+    private Text NomCapteur;
+    private Digital dig;
+    @FXML
+    private TextField ValeurCapteur;
 
     @FXML
-    TextField ValeurCapteur;
-
-    @FXML
-    public void initialize (Digital d){
-        NomCapteur.setText(d.getNom());
-        ValeurCapteur.setText("d.getValeur()");
+    public void setDig(Digital d) {
+        dig = d;
+        ValeurCapteur.textProperty().bind((d.valeurProperty().asString()));
+        NomCapteur.textProperty().bind(d.nomProperty());
     }
 }
