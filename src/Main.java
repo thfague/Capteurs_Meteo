@@ -9,13 +9,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Fenêtre d'accueil
-        Parent root = FXMLLoader.load(getClass().getResource("Vue/FenetreAccueil.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Vue/Accueil.fxml"));
         primaryStage.setTitle("Meteo");
         primaryStage.setScene(new Scene(root, 600, 350));
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args) { launch(args); }
 }

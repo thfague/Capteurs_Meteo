@@ -21,4 +21,5 @@ public abstract class Capteur {
         this.nom.setValue(nom);
         this.valeur.setValue(valeur);
     }
+
 }

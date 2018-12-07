@@ -8,8 +8,8 @@
           fx:controller="Vue.AffichageDigital" alignment="center"
           prefHeight="100.0" prefWidth="600.0">
 
-    <Text fx:id="NomCapteur" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <Text fx:id="NomCapteur" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>
 
-    <TextField fx:id="ValeurCapteur" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <TextField fx:id="ValeurCapteur" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
 
 </GridPane>

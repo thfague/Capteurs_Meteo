@@ -1,24 +1,23 @@
 package Vue;
 
 import Class_Metier.Digital;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 import javafx.util.Callback;
@@ -32,17 +31,18 @@ public class ControllerAccueil {
     List<Digital> l = new ArrayList<>();
     GridPane gridAffich = new GridPane();
 
+
     @FXML
     public void initialize (){
 
-        l.add(new Digital(20, "Capteur 1"));
+        l.add(new Digital(30, "Capteur 1"));
         l.add(new Digital(10, "Capteur 2"));
-        l.add(new Digital(14, "Capteur 3"));
+        l.add(new Digital(-2, "Capteur 3"));
 
         ObservableList<Digital> olCapteur = FXCollections.observableList(l);
         ListView<Digital> listCapteur = new ListView<>(olCapteur);
         //ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
-       // listCapteur.itemsProperty().bind(lp);
+        //listCapteur.itemsProperty().bind(lp);
 
         listCapteur.setCellFactory(new Callback<ListView<Digital>, ListCell<Digital>>() {
             @Override
@@ -53,6 +53,7 @@ public class ControllerAccueil {
 
         listCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
             textCapteur.setText(nV.getNom());
+           // textCapteur.setTextAlignment(textCapteur.CENTER);
             AffichageBouton(nV);
         });
 
@@ -68,9 +69,14 @@ public class ControllerAccueil {
             }
         });
 */
+        Font font = new Font("Arial",18);
+        textCapteur.setFont(font);
+
         gridAccueil.add(gridAffich, 1, 0);
         gridAccueil.add(listCapteur, 0, 0);
         gridAffich.add(textCapteur,0,0);
+        gridAccueil.setHalignment(textCapteur, HPos.CENTER);
+
         //gridAccueil.add(ajoutCapteurButton,0,1);
     }
 
@@ -118,11 +124,11 @@ public class ControllerAccueil {
             }
             if(nameFile.equals("affichageImgMeteo.fxml")) {
                 AffichageImgMeteo afi = loader.getController();
-                //afi.setImg(d);
+                afi.setImg(d);
             }
             Stage stage = new Stage();
             stage.setTitle(title);
-            stage.setScene(new Scene(root, 400, 275));
+            stage.setScene(new Scene(root, 400, 287));
             stage.show();
         }
         catch (IOException e) {
