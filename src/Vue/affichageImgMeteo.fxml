@@ -6,7 +6,6 @@
 <?import javafx.scene.image.ImageView?>
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
-          fx:controller="Vue.AffichageImgMeteo"
           prefHeight="400.0" prefWidth="600.0">
 
     <Text fx:id="NomCapteur" GridPane.rowIndex="0" GridPane.halignment="CENTER"/>

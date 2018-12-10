@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 import javafx.util.Callback;
 
-
 public class ControllerAccueil {
     @FXML
     GridPane gridAccueil;
@@ -30,7 +29,6 @@ public class ControllerAccueil {
     Text textCapteur = new Text();
     List<Digital> l = new ArrayList<>();
     GridPane gridAffich = new GridPane();
-
 
     @FXML
     public void initialize (){
@@ -53,10 +51,8 @@ public class ControllerAccueil {
 
         listCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
             textCapteur.setText(nV.getNom());
-           // textCapteur.setTextAlignment(textCapteur.CENTER);
             AffichageBouton(nV);
         });
-
 
         //Faire une classe à part pour ce bouton je pense(j'ai pas eut le temps)
         /*Button ajoutCapteurButton = new Button("Ajouter un capteur");
@@ -113,20 +109,19 @@ public class ControllerAccueil {
     {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nameFile));
-            Parent root = loader.load();
+
             if(nameFile.equals("affichageDigital.fxml")) {
-                AffichageDigital afd = loader.getController();
-                afd.setDig(d);
+                loader.setController(new AffichageDigital(d));
             }
             if(nameFile.equals("affichageThermo.fxml")) {
-                AffichageThermo aft = loader.getController();
-               // aft.setTherm(d);
+               // loader.setController(new AffichageThermo(d));
             }
             if(nameFile.equals("affichageImgMeteo.fxml")) {
-                AffichageImgMeteo afi = loader.getController();
-                afi.setImg(d);
+                loader.setController(new AffichageImgMeteo(d));
             }
+            Parent root = loader.load();
             Stage stage = new Stage();
+            stage.initOwner(gridAccueil.getScene().getWindow());
             stage.setTitle(title);
             stage.setScene(new Scene(root, 400, 287));
             stage.show();

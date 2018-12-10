@@ -26,7 +26,4 @@ public class DigitalFormatCell extends ListCell<Digital> {
             setText(item.getNom());
         }
     }
-
-
-
 }

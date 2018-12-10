@@ -2,6 +2,7 @@ package Vue;
 
 import Class_Metier.Digital;
 import javafx.beans.property.FloatProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
@@ -11,33 +12,40 @@ import javafx.scene.image.ImageView;
 public class AffichageImgMeteo {
     @FXML
     Text NomCapteur;
-
-    private Digital dig;
-
     @FXML
     ImageView idImg = new ImageView();
+    private FloatProperty val;
+    private Digital digital;
 
-    public void setImg(Digital d) {
-        dig = d;
+    public AffichageImgMeteo(Digital d){
+        digital=d;
+        val = new SimpleFloatProperty();
+    }
+
+    @FXML
+    private void initialize(){
         Font font = new Font("Arial",18);
         NomCapteur.setFont(font);
         Image img1 = new Image("/cielbleu.jpeg");
         Image img2 = new Image("/cielneige.jpg");
         Image img3 = new Image("/cielnuage.jpg");
-        NomCapteur.textProperty().bind(d.nomProperty());
+        NomCapteur.textProperty().bind(digital.nomProperty());
 
-       // val.textProperty().bind(AffichageDigital.d.valeurProperty.textProperty());
+        val.bind(digital.valeurProperty());
+        val.addListener(e-> {
+            calculValeur(val, img2, img1, img3);
+        });
+        calculValeur(val, img2, img1, img3);
+    }
 
-        float val = d.getValeur();
-        if(val < 0) {
+    private void calculValeur(FloatProperty val, Image img2, Image img1, Image img3){
+        if (val.get() < 0) {
             idImg.setImage(img2);
-        }
-        else if(val > 22){
+        } else if (val.get() > 22) {
             idImg.setImage(img1);
-        }
-        else {
+        } else {
             idImg.setImage(img3);
         }
-
     }
+
 }

@@ -8,7 +8,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //Fenêtre d'accueil
         Parent root = FXMLLoader.load(getClass().getResource("Vue/Accueil.fxml"));
         primaryStage.setTitle("Meteo");
         primaryStage.setScene(new Scene(root, 600, 350));
