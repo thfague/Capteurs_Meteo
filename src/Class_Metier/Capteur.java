@@ -1,25 +1,28 @@
 package Class_Metier;
 
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import Vue.GenerationValeur;
 
-public abstract class Capteur {
+import static java.lang.Thread.sleep;
 
-    private FloatProperty valeur = new SimpleFloatProperty();
-    public float getValeur() { return this.valeur.get(); }
-    public void setValeur(float valeur) { this.valeur.set(valeur); }
-    public FloatProperty valeurProperty() { return valeur; }
+public class Capteur extends CapteurAbstrait implements Runnable{
 
-    private StringProperty nom = new SimpleStringProperty();
-    public String getNom() { return this.nom.get(); }
-    public void setNom(String nom) { this.nom.set(nom); }
-    public StringProperty nomProperty() { return nom; }
+    GenerationValeur g = new GenerationValeur();
 
     public Capteur(float valeur, String nom) {
-        this.nom.setValue(nom);
-        this.valeur.setValue(valeur);
+        super(valeur, nom);
     }
 
+    public void run() {
+        try {
+            while(1==1) {
+                this.setValeur(g.valAleatoireBorne(-10,30));
+                //this.setValeur(g.valAleatoireReelle(this.getValeur(),2));
+                //this.setValeur(g.valAleatoireInfini());
+
+                sleep(2000);
+            }
+        } catch (Exception e) {
+            System.out.println("err");
+        }
+    }
 }

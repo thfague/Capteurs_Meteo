@@ -1,6 +1,6 @@
 package Vue;
 
-import Class_Metier.Digital;
+import Class_Metier.Capteur;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
@@ -13,9 +13,9 @@ public class AffichageDigital {
     private Text NomCapteur;
     @FXML
     private TextField ValeurCapteur;
-    private Digital digital;
+    private Capteur digital;
 
-    public AffichageDigital(Digital d){
+    public AffichageDigital(Capteur  d){
         digital=d;
     }
 

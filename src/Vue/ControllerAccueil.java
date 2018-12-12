@@ -1,6 +1,6 @@
 package Vue;
 
-import Class_Metier.Digital;
+import Class_Metier.Capteur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,24 +27,24 @@ public class ControllerAccueil {
     GridPane gridAccueil;
 
     Text textCapteur = new Text();
-    List<Digital> l = new ArrayList<>();
+    List<Capteur> l = new ArrayList<>();
     GridPane gridAffich = new GridPane();
-
+    GenerationValeur g = new GenerationValeur();
     @FXML
     public void initialize (){
 
-        l.add(new Digital(30, "Capteur 1"));
-        l.add(new Digital(10, "Capteur 2"));
-        l.add(new Digital(-2, "Capteur 3"));
+        l.add(new Capteur(g.valAleatoireBorne(10,30), "Capteur 1"));
+        l.add(new Capteur(g.valAleatoireInfini(), "Capteur 2"));
+        l.add(new Capteur(g.valAleatoireReelle(20,2), "Capteur 3"));
 
-        ObservableList<Digital> olCapteur = FXCollections.observableList(l);
-        ListView<Digital> listCapteur = new ListView<>(olCapteur);
+        ObservableList<Capteur> olCapteur = FXCollections.observableList(l);
+        ListView<Capteur> listCapteur = new ListView<>(olCapteur);
         //ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
         //listCapteur.itemsProperty().bind(lp);
 
-        listCapteur.setCellFactory(new Callback<ListView<Digital>, ListCell<Digital>>() {
+        listCapteur.setCellFactory(new Callback<ListView<Capteur>, ListCell<Capteur>>() {
             @Override
-            public ListCell<Digital> call(ListView<Digital> param) {
+            public ListCell<Capteur> call(ListView<Capteur> param) {
                 return new DigitalFormatCell(l);
             }
         });
@@ -77,7 +77,7 @@ public class ControllerAccueil {
     }
 
     //Création et ajout d'un bouton pour chaque type d'affichage
-    public void AffichageBouton(Digital d) {
+    public void AffichageBouton(Capteur d) {
         Button buttonDigit = new Button("Affichage digital");
         gridAffich.add(buttonDigit, 0, 1 );
         buttonDigit.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
@@ -105,13 +105,14 @@ public class ControllerAccueil {
     }
 
 
-    public void NewWindow(String nameFile, String title, Digital d)
+    public void NewWindow(String nameFile, String title, Capteur d)
     {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nameFile));
 
             if(nameFile.equals("affichageDigital.fxml")) {
                 loader.setController(new AffichageDigital(d));
+                new Thread(d).start();
             }
             if(nameFile.equals("affichageThermo.fxml")) {
                // loader.setController(new AffichageThermo(d));
