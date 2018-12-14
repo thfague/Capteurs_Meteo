@@ -14,12 +14,12 @@ public class Capteur extends CapteurAbstrait implements Runnable{
 
     public void run() {
         try {
-            while(1==1) {
+            while(true) {
                 this.setValeur(g.valAleatoireBorne(-10,30));
                 //this.setValeur(g.valAleatoireReelle(this.getValeur(),2));
                 //this.setValeur(g.valAleatoireInfini());
 
-                sleep(2000);
+                sleep(500);
             }
         } catch (Exception e) {
             System.out.println("err");

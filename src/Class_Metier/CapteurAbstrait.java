@@ -17,9 +17,15 @@ public abstract class CapteurAbstrait {
     public void setNom(String nom) { this.nom.set(nom); }
     public StringProperty nomProperty() { return nom; }
 
+    private FloatProperty coeff = new SimpleFloatProperty();
+    public float getCoeff() { return this.coeff.get(); }
+    public void setCoeff(float coeff) { this.coeff.set(coeff); }
+    public FloatProperty coeffProperty() { return coeff; }
+
     public CapteurAbstrait(float valeur, String nom) {
         this.nom.setValue(nom);
         this.valeur.setValue(valeur);
+        this.coeff.set(1);
     }
 
 }

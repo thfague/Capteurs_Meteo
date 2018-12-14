@@ -1,6 +1,7 @@
 package Vue;
 
 import Class_Metier.Capteur;
+import Class_Metier.CapteurComplexe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,12 +31,16 @@ public class ControllerAccueil {
     List<Capteur> l = new ArrayList<>();
     GridPane gridAffich = new GridPane();
     GenerationValeur g = new GenerationValeur();
+    CapteurComplexe capteurComplexe;
+
     @FXML
     public void initialize (){
-
         l.add(new Capteur(g.valAleatoireBorne(10,30), "Capteur 1"));
         l.add(new Capteur(g.valAleatoireInfini(), "Capteur 2"));
         l.add(new Capteur(g.valAleatoireReelle(20,2), "Capteur 3"));
+
+        capteurComplexe = new CapteurComplexe(l,"CapteurComplexe 1");
+        new Thread(capteurComplexe).start();
 
         ObservableList<Capteur> olCapteur = FXCollections.observableList(l);
         ListView<Capteur> listCapteur = new ListView<>(olCapteur);
@@ -54,17 +59,6 @@ public class ControllerAccueil {
             AffichageBouton(nV);
         });
 
-        //Faire une classe à part pour ce bouton je pense(j'ai pas eut le temps)
-        /*Button ajoutCapteurButton = new Button("Ajouter un capteur");
-        ajoutCapteurButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Random r = new Random();
-                float random = 10 + r.nextFloat() * (30 - 10);
-                l.add(new Digital(random, "?"));
-            }
-        });
-*/
         Font font = new Font("Arial",18);
         textCapteur.setFont(font);
 
@@ -72,8 +66,6 @@ public class ControllerAccueil {
         gridAccueil.add(listCapteur, 0, 0);
         gridAffich.add(textCapteur,0,0);
         gridAccueil.setHalignment(textCapteur, HPos.CENTER);
-
-        //gridAccueil.add(ajoutCapteurButton,0,1);
     }
 
     //Création et ajout d'un bouton pour chaque type d'affichage
@@ -112,7 +104,10 @@ public class ControllerAccueil {
 
             if(nameFile.equals("affichageDigital.fxml")) {
                 loader.setController(new AffichageDigital(d));
-                new Thread(d).start();
+                //Pour stopper un fred proprement
+                Thread fred = new Thread(d);
+                fred.start();
+                //fred.stop();
             }
             if(nameFile.equals("affichageThermo.fxml")) {
                // loader.setController(new AffichageThermo(d));
