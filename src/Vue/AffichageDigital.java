@@ -21,8 +21,6 @@ public class AffichageDigital {
 
     @FXML
     private void initialize(){
-        //ValeurCapteur.valueFactoryProperty().bind(digital.valeurProperty());
-        //ValeurCapteur.getValueFactory().valueProperty().bind(digital.valeurProperty().asObject());
         ValeurCapteur.textProperty().bindBidirectional(digital.valeurProperty(), new NumberStringConverter());
         NomCapteur.textProperty().bind(digital.nomProperty());
         Font font = new Font("Arial",18);

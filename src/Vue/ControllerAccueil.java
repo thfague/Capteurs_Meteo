@@ -18,7 +18,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 import javafx.util.Callback;
@@ -31,7 +34,6 @@ public class ControllerAccueil {
     List<Capteur> l = new ArrayList<>();
     GridPane gridAffich = new GridPane();
     GenerationValeur g = new GenerationValeur();
-    CapteurComplexe capteurComplexe;
 
     @FXML
     public void initialize (){
@@ -39,12 +41,19 @@ public class ControllerAccueil {
         l.add(new Capteur(g.valAleatoireInfini(), "Capteur 2"));
         l.add(new Capteur(g.valAleatoireReelle(20,2), "Capteur 3"));
 
-        capteurComplexe = new CapteurComplexe(l,"CapteurComplexe 1");
-        new Thread(capteurComplexe).start();
+        Map<Capteur,Integer> m = new HashMap<>();
+        CapteurComplexe capteurComplexe = new CapteurComplexe(m,"CapteurComplexe 1");
+        m.put(l.get(0), 1);
+        m.put(l.get(1), 1);
+        m.put(l.get(2), 1);
+        Thread fred = new Thread(capteurComplexe);
+        fred.start();
+
+        //System.out.println(capteurComplexe.getValeur());
 
         ObservableList<Capteur> olCapteur = FXCollections.observableList(l);
         ListView<Capteur> listCapteur = new ListView<>(olCapteur);
-        //ListProperty<Digital> lp = new SimpleListProperty<>(olCapteur);
+        //ListProperty<Capteur> lp = new SimpleListProperty<>(olCapteur);
         //listCapteur.itemsProperty().bind(lp);
 
         listCapteur.setCellFactory(new Callback<ListView<Capteur>, ListCell<Capteur>>() {
@@ -53,6 +62,7 @@ public class ControllerAccueil {
                 return new DigitalFormatCell(l);
             }
         });
+
 
         listCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
             textCapteur.setText(nV.getNom());
@@ -104,7 +114,6 @@ public class ControllerAccueil {
 
             if(nameFile.equals("affichageDigital.fxml")) {
                 loader.setController(new AffichageDigital(d));
-                //Pour stopper un fred proprement
                 Thread fred = new Thread(d);
                 fred.start();
                 //fred.stop();

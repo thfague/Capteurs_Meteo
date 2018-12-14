@@ -19,7 +19,7 @@ public class Capteur extends CapteurAbstrait implements Runnable{
                 //this.setValeur(g.valAleatoireReelle(this.getValeur(),2));
                 //this.setValeur(g.valAleatoireInfini());
 
-                sleep(500);
+                sleep(60000);
             }
         } catch (Exception e) {
             System.out.println("err");
