@@ -1,6 +1,7 @@
 package Vue;
 
 import Class_Metier.Capteur;
+import Class_Metier.CapteurAbstrait;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.fxml.FXML;
@@ -15,9 +16,9 @@ public class AffichageImgMeteo {
     @FXML
     ImageView idImg = new ImageView();
     private FloatProperty val;
-    private Capteur digital;
+    private CapteurAbstrait digital;
 
-    public AffichageImgMeteo(Capteur d){
+    public AffichageImgMeteo(CapteurAbstrait d){
         digital=d;
         val = new SimpleFloatProperty();
     }

@@ -5,12 +5,14 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public abstract class CapteurAbstrait {
+import java.util.Observable;
+
+public abstract class CapteurAbstrait extends Observable {
 
     private FloatProperty valeur = new SimpleFloatProperty();
     public float getValeur() { return this.valeur.get(); }
-    public void setValeur(float valeur) { this.valeur.set(valeur); }
-    public FloatProperty valeurProperty() { return valeur; }
+    public void setValeur(float valeur) { this.valeur.set(valeur); notifyObservers(); }
+    public FloatProperty valeurProperty() { return this.valeur; }
 
     private StringProperty nom = new SimpleStringProperty();
     public String getNom() { return this.nom.get(); }
@@ -21,5 +23,4 @@ public abstract class CapteurAbstrait {
         this.nom.setValue(nom);
         this.valeur.setValue(valeur);
     }
-
 }

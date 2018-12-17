@@ -1,6 +1,8 @@
 package Vue;
 
 import Class_Metier.Capteur;
+import Class_Metier.CapteurAbstrait;
+import Class_Metier.CapteurComplexe;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
@@ -13,18 +15,22 @@ public class AffichageDigital {
     private Text NomCapteur;
     @FXML
     private TextField ValeurCapteur;
-    private Capteur digital;
+    private CapteurAbstrait digital;
 
-    public AffichageDigital(Capteur  d){
+    public AffichageDigital(CapteurAbstrait  d){
         digital=d;
     }
 
     @FXML
     private void initialize(){
-        ValeurCapteur.textProperty().bindBidirectional(digital.valeurProperty(), new NumberStringConverter());
         NomCapteur.textProperty().bind(digital.nomProperty());
-        Font font = new Font("Arial",18);
+        Font font = new Font("Arial", 18);
         NomCapteur.setFont(font);
-
+        if (digital instanceof Capteur) {
+            ValeurCapteur.textProperty().bindBidirectional(digital.valeurProperty(), new NumberStringConverter());
+        }
+        if (digital instanceof CapteurComplexe) {
+            ValeurCapteur.textProperty().bind(digital.valeurProperty().asString());
+        }
     }
 }

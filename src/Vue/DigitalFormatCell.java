@@ -1,14 +1,15 @@
 package Vue;
 
 import Class_Metier.Capteur;
+import Class_Metier.CapteurAbstrait;
 import javafx.scene.control.ListCell;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DigitalFormatCell extends ListCell<Capteur> {
-    List<Capteur> list = new ArrayList<>();
+public class DigitalFormatCell extends ListCell<CapteurAbstrait> {
+    List<CapteurAbstrait> list = new ArrayList<>();
 
-    public DigitalFormatCell(List<Capteur> l) {
+    public DigitalFormatCell(List<CapteurAbstrait> l) {
         for(int i = 0; i < l.size(); i++) {
             list.add(l.get(i));
         }
@@ -16,7 +17,7 @@ public class DigitalFormatCell extends ListCell<Capteur> {
     }
 
     @Override
-    public void updateItem(Capteur item, boolean empty) {
+    public void updateItem(CapteurAbstrait item, boolean empty) {
         super.updateItem(item, empty);
 
         if (empty || item == null) {
