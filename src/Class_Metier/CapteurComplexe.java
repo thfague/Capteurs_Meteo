@@ -1,11 +1,15 @@
 package Class_Metier;
 
+import javafx.beans.property.IntegerProperty;
+
+
 import java.util.*;
 
 public class CapteurComplexe extends CapteurAbstrait implements Observer {
 
     private Map<CapteurAbstrait, Integer> listeCapteur;
-    public Map<CapteurAbstrait,Integer> getListeCapteur() { return listeCapteur; }
+    public Map<CapteurAbstrait,Integer> getListeCapteur() {
+        return listeCapteur; }
 
     public CapteurComplexe(Map<CapteurAbstrait, Integer> m, String nom) {
         super(0f, nom);
@@ -16,14 +20,19 @@ public class CapteurComplexe extends CapteurAbstrait implements Observer {
     private float calculValeur() {
         float sommeCoeff = 0f;
         float valeur = 0f;
-        Set<Map.Entry<CapteurAbstrait, Integer>> setlisteCapteur = this.listeCapteur.entrySet();
-        Iterator<Map.Entry<CapteurAbstrait, Integer>> it = setlisteCapteur.iterator();
-        while(it.hasNext()){
-            Map.Entry<CapteurAbstrait, Integer> e = it.next();
-            sommeCoeff = sommeCoeff + e.getValue();
-            valeur = valeur + e.getKey().getValeur() * e.getValue();
+        if(listeCapteur.size() == 0) {
+            return valeur;
         }
-        return valeur/sommeCoeff;
+        else {
+            Set<Map.Entry<CapteurAbstrait, Integer>> setlisteCapteur = this.listeCapteur.entrySet();
+            Iterator<Map.Entry<CapteurAbstrait, Integer>> it = setlisteCapteur.iterator();
+            while (it.hasNext()) {
+                Map.Entry<CapteurAbstrait, Integer> e = it.next();
+                sommeCoeff = sommeCoeff + e.getValue();
+                valeur = valeur + e.getKey().getValeur() * e.getValue();
+            }
+            return valeur / sommeCoeff;
+        }
     }
 
     @Override

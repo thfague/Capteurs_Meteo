@@ -66,7 +66,9 @@ public class ControllerAccueil {
             if(nV instanceof CapteurComplexe) {
                 AffichageBouton(nV, "Configuration", "affichageConfig.fxml", "Configuration Capteur Complexe", 5);
             }
-
+            else {
+                gridAffich.getChildren().removeIf(node -> GridPane.getRowIndex(node) == 5);
+            }
             AffichageBoutonSupprimer(nV, olCapteur, 4);
         });
 
@@ -98,6 +100,14 @@ public class ControllerAccueil {
             @Override
             public void handle(ActionEvent actionEvent) {
                 l.remove(c);
+                Integer i;
+                for (i=0; i < l.size(); i++) {
+                    if(l.get(i) instanceof CapteurComplexe){
+                        if(((CapteurComplexe) l.get(i)).getListeCapteur().containsKey(c)){
+                            ((CapteurComplexe) l.get(i)).getListeCapteur().remove(c);
+                        }
+                    }
+                }
             }
         });
     }
@@ -123,7 +133,7 @@ public class ControllerAccueil {
             Stage stage = new Stage();
             stage.initOwner(gridAccueil.getScene().getWindow());
             stage.setTitle(title);
-            stage.setScene(new Scene(root, 400, 287));
+            stage.setScene(new Scene(root, 500, 400));
             stage.show();
         }
         catch (IOException e) {
