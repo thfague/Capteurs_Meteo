@@ -11,7 +11,7 @@ public abstract class CapteurAbstrait extends Observable {
 
     private FloatProperty valeur = new SimpleFloatProperty();
     public float getValeur() { return this.valeur.get(); }
-    public void setValeur(float valeur) { this.valeur.set(valeur); notifyObservers(); }
+    public void setValeur(float valeur) { this.valeur.set(valeur); setChanged(); notifyObservers(); }
     public FloatProperty valeurProperty() { return this.valeur; }
 
     private StringProperty nom = new SimpleStringProperty();

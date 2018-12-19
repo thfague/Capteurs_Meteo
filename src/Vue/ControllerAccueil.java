@@ -3,6 +3,7 @@ package Vue;
 import Class_Metier.Capteur;
 import Class_Metier.CapteurAbstrait;
 import Class_Metier.CapteurComplexe;
+import com.sun.istack.internal.localization.NullLocalizable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,10 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
@@ -62,7 +60,14 @@ public class ControllerAccueil {
 
         listCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
             textCapteur.setText(nV.getNom());
-            AffichageBouton(nV);
+            AffichageBouton(nV, "Affichage digital", "affichageDigital.fxml", "Affichage format digital", 1);
+            AffichageBouton(nV, "Affichage par thermomètre", "affichageThermo.fxml", "Affichage format thermomètre", 2);
+            AffichageBouton(nV, "Affichage imagé", "affichageImgMeteo.fxml", "Affichage format image", 3);
+            if(nV instanceof CapteurComplexe) {
+                AffichageBouton(nV, "Configuration", "affichageConfig.fxml", "Configuration Capteur Complexe", 5);
+            }
+
+            AffichageBoutonSupprimer(nV, olCapteur, 4);
         });
 
         Font font = new Font("Arial",18);
@@ -74,34 +79,28 @@ public class ControllerAccueil {
         gridAccueil.setHalignment(textCapteur, HPos.CENTER);
     }
 
-    //Création et ajout d'un bouton pour chaque type d'affichage
-    public void AffichageBouton(CapteurAbstrait d) {
-        Button buttonDigit = new Button("Affichage digital");
-        gridAffich.add(buttonDigit, 0, 1 );
-        buttonDigit.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+    //Création et ajout d'un bouton pour un type d'affichage
+    public void AffichageBouton(CapteurAbstrait d, String nomButton, String nomFichier, String titreFichier, Integer line) {
+        Button b = new Button(nomButton);
+        gridAffich.add(b, 0, line);
+        b.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                NewWindow("affichageDigital.fxml", "Affichage format digital", d);
-            }
-        });
-        Button buttonThermo = new Button("Affichage par thermomètre");
-        gridAffich.add(buttonThermo, 0, 2 );
-        buttonThermo.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                NewWindow("affichageThermo.fxml", "Affichage format thermomètre", d);
-            }
-        });
-        Button buttonImg = new Button("Affichage imagé");
-        gridAffich.add(buttonImg, 0, 3 );
-        buttonImg.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                NewWindow("affichageImgMeteo.fxml", "Affichage format image", d);
+                NewWindow(nomFichier, titreFichier, d);
             }
         });
     }
 
+    public void AffichageBoutonSupprimer(CapteurAbstrait c, ObservableList<CapteurAbstrait> l, Integer line) {
+        Button b = new Button("Supprimer");
+        gridAffich.add(b, 0, line);
+        b.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                l.remove(c);
+            }
+        });
+    }
 
     public void NewWindow(String nameFile, String title, CapteurAbstrait d)
     {
@@ -116,6 +115,9 @@ public class ControllerAccueil {
             }
             if(nameFile.equals("affichageImgMeteo.fxml")) {
                 loader.setController(new AffichageImgMeteo(d));
+            }
+            if(nameFile.equals("affichageConfig.fxml")) {
+                loader.setController(new AffichageConfig((CapteurComplexe)d));
             }
             Parent root = loader.load();
             Stage stage = new Stage();

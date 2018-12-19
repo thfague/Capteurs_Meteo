@@ -13,7 +13,6 @@ public class DigitalFormatCell extends ListCell<CapteurAbstrait> {
         for(int i = 0; i < l.size(); i++) {
             list.add(l.get(i));
         }
-        System.out.println(list);
     }
 
     @Override

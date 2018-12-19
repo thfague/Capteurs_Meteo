@@ -20,11 +20,11 @@ Semaine 2:
 **    -à fenêtre glissante [-2;+2]
 
 Semaine 3:
-*On va à présent visualiser des 'capteurs' plus complexes dont la valeur dépend d'autres capteurs
-On pourra appeler CapteurComplexe
-*Un capteur complexe C connaît différent capteurs(peu importe leur type)
-c1,...,cN et génère une nouvelle valeur dès que l'un d'eux change tel que
-    Cc.valeur = (somme'i=1 à N' ai*ci.valeur)/(somme'i=1 a N' ai )
-    où les ai sont les pondérations de chaque capteur
-*On veut visualiser ces capteurs sous forme hiérarchique et pouvoir continuer à les configurer comme avant.
+**On va à présent visualiser des 'capteurs' plus complexes dont la valeur dépend d'autres capteurs
+**On pourra appeler CapteurComplexe
+**Un capteur complexe C connaît différent capteurs(peu importe leur type)
+**c1,...,cN et génère une nouvelle valeur dès que l'un d'eux change tel que
+**    Cc.valeur = (somme'i=1 à N' ai*ci.valeur)/(somme'i=1 a N' ai )
+**    où les ai sont les pondérations de chaque capteur
+**On veut visualiser ces capteurs sous forme hiérarchique et pouvoir continuer à les configurer comme avant.
 Pour les capteurs complexes cela voudra dire pouvoir ajouter un s/s capteur et pouvoir changer son coefficient à associer
