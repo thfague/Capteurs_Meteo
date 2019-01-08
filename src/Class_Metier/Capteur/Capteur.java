@@ -1,30 +1,25 @@
-package Class_Metier;
+package Class_Metier.Capteur;
 
-import Vue.GenerationValeur;
-import javafx.beans.Observable;
-
+import Class_Metier.Generateur.GenerationValeurAbstrait;
 import static java.lang.Thread.sleep;
 
 public class Capteur extends CapteurAbstrait implements Runnable {
 
-    GenerationValeur g = new GenerationValeur();
+    GenerationValeurAbstrait g;
     Integer tpsChangement;
 
-    public Capteur(float valeur, String nom, Integer tps) {
+    public Capteur(float valeur, String nom, Integer tps, GenerationValeurAbstrait g) {
         super(valeur, nom);
         tpsChangement = tps;
+        this.g = g;
         Thread fred = new Thread(this);
         fred.start();
-
     }
 
     public void run() {
         try {
             while(true) {
-                this.setValeur(g.valAleatoireBorne(-10,30));
-                //this.setValeur(g.valAleatoireReelle(this.getValeur(),2));
-                //this.setValeur(g.valAleatoireInfini());
-
+                this.setValeur(g.generer());
                 sleep(tpsChangement);
             }
         } catch (Exception e) {

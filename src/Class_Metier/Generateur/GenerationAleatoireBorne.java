@@ -1,0 +1,20 @@
+package Class_Metier.Generateur;
+
+import java.util.Random;
+
+public class GenerationAleatoireBorne implements GenerationValeurAbstrait {
+
+    private int min;
+    private int max;
+
+    public GenerationAleatoireBorne(int min, int max) {
+        this.min = min;
+        this.max = max;
+    }
+
+    public float generer() {
+        Random r = new Random();
+        return min + r.nextFloat() * (max - min);
+    }
+
+}

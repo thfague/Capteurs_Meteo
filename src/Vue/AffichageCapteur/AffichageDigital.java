@@ -1,8 +1,8 @@
-package Vue;
+package Vue.AffichageCapteur;
 
-import Class_Metier.Capteur;
-import Class_Metier.CapteurAbstrait;
-import Class_Metier.CapteurComplexe;
+import Class_Metier.Capteur.Capteur;
+import Class_Metier.Capteur.CapteurAbstrait;
+import Class_Metier.Capteur.CapteurComplexe;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
@@ -13,8 +13,6 @@ import javafx.util.converter.NumberStringConverter;
 public class AffichageDigital {
     @FXML
     private Text NomCapteur;
-    @FXML
-    private Text nbCapteur;
     @FXML
     private TextField ValeurCapteur;
     private CapteurAbstrait digital;
@@ -33,13 +31,6 @@ public class AffichageDigital {
         }
         if (digital instanceof CapteurComplexe) {
             ValeurCapteur.textProperty().bind(digital.valeurProperty().asString());
-            /*if(((CapteurComplexe) digital).getListeCapteur().size() < 2) {
-                nbCapteur.textProperty().bind(((CapteurComplexe) digital).getListeCapteur().size() +" capteur relié");
-            }
-            else {
-                nbCapteur.setText(((CapteurComplexe) digital).getListeCapteur().size() +" capteurs reliés");
-            }*/
-
         }
     }
 }

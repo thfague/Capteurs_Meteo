@@ -1,7 +1,4 @@
-package Class_Metier;
-
-import javafx.beans.property.IntegerProperty;
-
+package Class_Metier.Capteur;
 
 import java.util.*;
 

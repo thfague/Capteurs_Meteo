@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vue.AffichageThermo">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vue.AffichageCapteur.AffichageThermo">
    <children>
       <Circle fill="#687078" layoutX="300.0" layoutY="75.0" radius="27.0" smooth="false" stroke="#687078" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#687078" height="162.0" layoutX="273.0" layoutY="75.0" smooth="false" stroke="#687078" strokeLineJoin="BEVEL" strokeMiterLimit="1.0" strokeType="INSIDE" width="54.0" />

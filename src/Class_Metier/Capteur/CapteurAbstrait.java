@@ -1,10 +1,9 @@
-package Class_Metier;
+package Class_Metier.Capteur;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.util.Observable;
 
 public abstract class CapteurAbstrait extends Observable {
