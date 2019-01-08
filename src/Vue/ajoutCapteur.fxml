@@ -2,17 +2,8 @@
 
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ComboBox?>
-
-<GridPane fx:id="gridAccueil"
+<GridPane fx:id="gridAjoutC"
           xmlns:fx="http://javafx.com/fxml"
           prefHeight="400.0" prefWidth="600.0">
-
-    <!--<ComboBox fx:id="comboCapteur" GridPane.columnIndex="0" GridPane.RowIndex="0"/>
-    <Text value="Nom du capteur : " GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
-    <TextField fx:id="nomCapteur" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER"/>
-    <ComboBox fx:id="comboGenerateur" GridPane.columnIndex="0" GridPane.RowIndex="2"/>-->
 
 </GridPane>

@@ -2,15 +2,18 @@ package Vue;
 
 import Class_Metier.Capteur.CapteurAbstrait;
 import Class_Metier.Capteur.CapteurComplexe;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -29,7 +32,9 @@ public class AffichageConfig {
     private List<CapteurAbstrait> listTotalCapteur = new ArrayList<>();
     private List<CapteurAbstrait> listeCNonApproprie;
     private  ObservableList<CapteurAbstrait> olCapteur;
-
+    private Text Coef = new Text();
+    private Spinner<Integer> coefficient = new Spinner<>();
+    private SpinnerValueFactory val = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1);
 
     public AffichageConfig(CapteurComplexe  d, List<CapteurAbstrait> l){
         digital=d;
@@ -37,7 +42,9 @@ public class AffichageConfig {
     }
 
     @FXML
-    private void initialize(){
+    private void initialize() {
+        coefficient.valueFactoryProperty().setValue(val);
+        Coef.setText("Coefficient : ");
         NomCapteur.setText(digital.getNom());
         Font font = new Font("Arial", 18);
         NomCapteur.setFont(font);
@@ -122,6 +129,8 @@ public class AffichageConfig {
                     vb.getChildren().clear();
                     AffichageBoutonAC();
                     vb.getChildren().add(listVCapteur);
+                    vb.getChildren().add(Coef);
+                    vb.getChildren().add(coefficient);
                     AffichageBoutonA(nV, oCapteur);
                 });
 
@@ -138,7 +147,7 @@ public class AffichageConfig {
         buttonAjout.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-               digital.ajoutCapteur(c, 1);
+               digital.ajoutCapteur(c, coefficient.getValue());
                ChargementListeC();
                vb.getChildren().clear();
                AffichageBoutonAC();
