@@ -41,7 +41,7 @@ public class ControllerAccueil {
     Text textCapteur = new Text();
     List<CapteurAbstrait> l = new ArrayList<>();
     VBox vb = new VBox();
-
+    ObservableList<CapteurAbstrait> olCapteur;
 
     @FXML
     public void initialize (){
@@ -58,7 +58,7 @@ public class ControllerAccueil {
         capteurComplexe.ajoutCapteur(l.get(2), 3);
         l.add(capteurComplexe);
 
-        ObservableList<CapteurAbstrait> olCapteur = FXCollections.observableList(l);
+        olCapteur = FXCollections.observableList(l);
         ListView<CapteurAbstrait> listCapteur = new ListView<>(olCapteur);
 
         listCapteur.setCellFactory(new Callback<ListView<CapteurAbstrait>, ListCell<CapteurAbstrait>>() {
@@ -87,7 +87,7 @@ public class ControllerAccueil {
             public void handle(ActionEvent actionEvent) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("ajoutCapteur.fxml"));
-                    loader.setController(new AjoutCapteur(l));
+                    loader.setController(new AjoutCapteur(olCapteur));
                     Parent root = loader.load();
                     Stage stage = new Stage();
                     stage.initOwner(gridAccueil.getScene().getWindow());
@@ -157,7 +157,7 @@ public class ControllerAccueil {
                 case "AffichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(d)); break;
                 //case "AffichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(d)); break;
                 case "AffichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(d)); break;
-                case "affichageConfig.fxml": loader.setController(new AffichageConfig((CapteurComplexe)d, l)); break;
+                case "affichageConfig.fxml": loader.setController(new AffichageConfig((CapteurComplexe)d, olCapteur)); break;
             }
             Parent root = loader.load();
             Stage stage = new Stage();

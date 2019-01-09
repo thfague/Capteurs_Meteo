@@ -1,7 +1,12 @@
 package Vue;
 
+import Class_Metier.Capteur.Capteur;
 import Class_Metier.Capteur.CapteurAbstrait;
 import Class_Metier.Capteur.CapteurComplexe;
+import Class_Metier.Generateur.GenerationAleatoireBorne;
+import Class_Metier.Generateur.GenerationAleatoireInfini;
+import Class_Metier.Generateur.GenerationAleatoireReelle;
+import Class_Metier.Generateur.GenerationValeurAbstrait;
 import Vue.AffichageCapteur.AffichageDigital;
 import Vue.AffichageCapteur.AffichageImgMeteo;
 import javafx.collections.FXCollections;
@@ -22,6 +27,9 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.*;
+
+import static javafx.application.Platform.exit;
+import static javafx.application.Platform.isImplicitExit;
 
 public class AjoutCapteur {
     @FXML
@@ -46,12 +54,13 @@ public class AjoutCapteur {
 
     private Button validation = new Button("Valider");
 
-    private List<CapteurAbstrait> listTotalCapteur = new ArrayList<>();
+    private ObservableList<CapteurAbstrait> listTotalCapteur;
     private Map<CapteurAbstrait,Integer> m = new HashMap<>();
     private CapteurComplexe cc = new CapteurComplexe(m,"");
+    private Capteur c;
     private int choix;
 
-    public AjoutCapteur(List<CapteurAbstrait> l){
+    public AjoutCapteur(ObservableList<CapteurAbstrait> l){
         listTotalCapteur = l;
     }
 
@@ -73,7 +82,7 @@ public class AjoutCapteur {
         comboCapteur.getItems().addAll("Capteur", "CapteurComplexe");
         comboCapteur.getSelectionModel().selectFirst();
 
-        comboGenerateur.getItems().addAll("GenerationAleatoireBorne", "GenerationAleatoireReelle", "GenerationAleatoireInfini");
+        comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
         comboGenerateur.getSelectionModel().selectFirst();
 
         comboCapteur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
@@ -106,19 +115,19 @@ public class AjoutCapteur {
         vb.getChildren().add(tpsTF);
         vb.getChildren().add(comboGenerateur);
         comboGenerateur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
-            if (nV.equals("GenerationAleatoireBorne")) {
+            if (nV.equals("Generation Aleatoire Borne")) {
                 min.setText("Minimum : ");
                 max.setText("Maximum : ");
                 AffichageGenerateur();
                 choix = 1;
             }
-            if (change.getValue().equals("GenerationAleatoireReelle")) {
+            if (change.getValue().equals("Generation Aleatoire Reelle")) {
                 min.setText("Valeur de départ :");
                 max.setText("Valeur de différence");
                 AffichageGenerateur();
                 choix = 2;
             }
-            if (change.getValue().equals("GenerationAleatoireInfini")) {
+            if (change.getValue().equals("Generation Aleatoire Infini")) {
                 vbOptionGenerateur.getChildren().clear();
                 vbOptionGenerateur.getChildren().add(validation);
                 choix = 3;
@@ -176,12 +185,54 @@ public class AjoutCapteur {
     }
 
     private void validationCapteurComplexe() {
-
+        for(int i = 0; i < listTotalCapteur.size(); i++) {
+            if(nomCapteur.getText().equals(listTotalCapteur.get(i).getNom())) {
+                AffichageCapteurComplexe();
+                nomCapteur.setText("");
+                vb.getChildren().add(new Text("Nom de capteur déjà pris"));
+            }
+        }
+        cc.setNom(nomCapteur.getText());
+        listTotalCapteur.add(cc);
     }
 
     private void validationCapteur() {
-
+        GenerationValeurAbstrait g;
+        for(int i = 0; i < listTotalCapteur.size(); i++) {
+            if(nomCapteur.getText().equals(listTotalCapteur.get(i).getNom())) {
+                AffichageCapteur();
+                nomCapteur.setText("");
+                vb.getChildren().add(new Text("Nom de capteur déjà pris"));
+                isImplicitExit();
+            }
+        }
+        if(choix == 1) {
+            int valMin = Integer.parseInt(minTF.getText());
+            int valMax = Integer.parseInt(maxTF.getText());
+            if(valMin >= valMax) {
+                AffichageCapteur();
+                nomCapteur.setText("");
+                minTF.setText("");
+                maxTF.setText("");
+                tpsTF.setText("");
+                vb.getChildren().add(new Text("La valeur minimum doit être inférieur à la valeur maximum"));
+                exit();
+            }
+            g = new GenerationAleatoireBorne(valMin, valMax);
+        }
+        if(choix == 2) {
+            int valMin = Integer.parseInt(minTF.getText());
+            int valMax = Integer.parseInt(maxTF.getText());
+            g = new GenerationAleatoireReelle(valMin, valMax);
+        }
+        else {
+            g = new GenerationAleatoireInfini();
+        }
+        int valTps = Integer.parseInt(tpsTF.getText());
+        c = new Capteur(0,nomCapteur.getText(),valTps,g);
+        listTotalCapteur.add(c);
     }
+
 
 
 }
