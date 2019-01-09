@@ -28,3 +28,6 @@ Semaine 3:
 **    où les ai sont les pondérations de chaque capteur
 **On veut visualiser ces capteurs sous forme hiérarchique et pouvoir continuer à les configurer comme avant.
 Pour les capteurs complexes cela voudra dire pouvoir ajouter un s/s capteur et pouvoir changer son coefficient à associer
+
+
+Verification : ne pas pour mettre de string dans minimun et max dans ajouter un capteur

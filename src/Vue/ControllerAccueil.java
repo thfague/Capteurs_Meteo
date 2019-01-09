@@ -155,7 +155,7 @@ public class ControllerAccueil {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nameFile));
             switch (nameFile) {
                 case "AffichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(d)); break;
-                //case "AffichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(d)); break;
+                case "AffichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(d)); break;
                 case "AffichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(d)); break;
                 case "affichageConfig.fxml": loader.setController(new AffichageConfig((CapteurComplexe)d, olCapteur)); break;
             }

@@ -47,7 +47,8 @@ public class AjoutCapteur {
     private TextField minTF = new TextField();
     private TextField maxTF = new TextField();
     private TextField nomCapteur = new TextField();
-    private TextField tpsTF = new TextField();
+    private Spinner<Integer> tpsTF = new Spinner<>();
+    private SpinnerValueFactory val = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1);
 
     private ComboBox comboCapteur = new ComboBox();
     private ComboBox comboGenerateur = new ComboBox();
@@ -66,14 +67,15 @@ public class AjoutCapteur {
 
     @FXML
     public void initialize (){
-
+        tpsTF.setValueFactory(val);
         validation.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if(choix == 1 || choix == 2 || choix == 3) {
                     validationCapteur();
+
                 }
-                else {
+                if(choix == 4) {
                     validationCapteurComplexe();
                 }
             }
@@ -99,6 +101,7 @@ public class AjoutCapteur {
         gridAjoutC.add(vb, 0, 0);
         gridAjoutC.add(vbOption, 1, 1);
         gridAjoutC.add(vbOptionGenerateur, 0, 1);
+
     }
 
     public void AffichageCapteur()
@@ -116,26 +119,27 @@ public class AjoutCapteur {
         vb.getChildren().add(comboGenerateur);
         comboGenerateur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
             if (nV.equals("Generation Aleatoire Borne")) {
+                choix = 1;
                 min.setText("Minimum : ");
                 max.setText("Maximum : ");
                 AffichageGenerateur();
-                choix = 1;
             }
             if (change.getValue().equals("Generation Aleatoire Reelle")) {
+                choix = 2;
                 min.setText("Valeur de départ :");
                 max.setText("Valeur de différence");
                 AffichageGenerateur();
-                choix = 2;
             }
             if (change.getValue().equals("Generation Aleatoire Infini")) {
+                choix = 3;
                 vbOptionGenerateur.getChildren().clear();
                 vbOptionGenerateur.getChildren().add(validation);
-                choix = 3;
             }
         });
         min.setText("Minimum : ");
         max.setText("Maximum : ");
         AffichageGenerateur();
+        choix = 1;
     }
 
     public void AffichageGenerateur()
@@ -190,10 +194,13 @@ public class AjoutCapteur {
                 AffichageCapteurComplexe();
                 nomCapteur.setText("");
                 vb.getChildren().add(new Text("Nom de capteur déjà pris"));
+                return;
             }
         }
         cc.setNom(nomCapteur.getText());
         listTotalCapteur.add(cc);
+        Stage stage = (Stage) validation.getScene().getWindow();
+        stage.close();
     }
 
     private void validationCapteur() {
@@ -202,8 +209,10 @@ public class AjoutCapteur {
             if(nomCapteur.getText().equals(listTotalCapteur.get(i).getNom())) {
                 AffichageCapteur();
                 nomCapteur.setText("");
-                vb.getChildren().add(new Text("Nom de capteur déjà pris"));
-                isImplicitExit();
+                minTF.setText("");
+                maxTF.setText("");
+                vbOptionGenerateur.getChildren().add(new Text("Nom de capteur déjà pris"));
+                return;
             }
         }
         if(choix == 1) {
@@ -214,13 +223,12 @@ public class AjoutCapteur {
                 nomCapteur.setText("");
                 minTF.setText("");
                 maxTF.setText("");
-                tpsTF.setText("");
                 vb.getChildren().add(new Text("La valeur minimum doit être inférieur à la valeur maximum"));
-                exit();
+                return;
             }
             g = new GenerationAleatoireBorne(valMin, valMax);
         }
-        if(choix == 2) {
+        else if(choix == 2) {
             int valMin = Integer.parseInt(minTF.getText());
             int valMax = Integer.parseInt(maxTF.getText());
             g = new GenerationAleatoireReelle(valMin, valMax);
@@ -228,11 +236,9 @@ public class AjoutCapteur {
         else {
             g = new GenerationAleatoireInfini();
         }
-        int valTps = Integer.parseInt(tpsTF.getText());
-        c = new Capteur(0,nomCapteur.getText(),valTps,g);
+        c = new Capteur(0,nomCapteur.getText(),tpsTF.getValue()*1000,g);
         listTotalCapteur.add(c);
+        Stage stage = (Stage) validation.getScene().getWindow();
+        stage.close();
     }
-
-
-
 }
