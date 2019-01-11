@@ -2,15 +2,17 @@ package Vue;
 
 import Class_Metier.Capteur.CapteurAbstrait;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class DigitalFormatCell extends ListCell<CapteurAbstrait> {
-    List<CapteurAbstrait> listeCapteur = new ArrayList<>();
+    private List<CapteurAbstrait> listeCapteur = new ArrayList<>();
 
-    public DigitalFormatCell(List<CapteurAbstrait> listeCapteur2) {
-        for(int i = 0; i < listeCapteur2.size(); i++) {
-            listeCapteur.add(listeCapteur2.get(i));
+    public DigitalFormatCell(List<CapteurAbstrait> listeC) {
+        for(int i = 0; i < listeC.size(); i++) {
+            listeCapteur.add(listeC.get(i));
         }
     }
 

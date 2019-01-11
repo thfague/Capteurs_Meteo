@@ -5,8 +5,7 @@ import java.util.*;
 public class CapteurComplexe extends CapteurAbstrait implements Observer {
 
     private Map<CapteurAbstrait, Integer> listeCapteur;
-    public Map<CapteurAbstrait,Integer> getListeCapteur() {
-        return listeCapteur; }
+    public Map<CapteurAbstrait,Integer> getListeCapteur() { return listeCapteur; }
 
     public CapteurComplexe(Map<CapteurAbstrait, Integer> m, String nom) {
         super(0f, nom);

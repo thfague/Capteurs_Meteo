@@ -5,9 +5,9 @@ import static java.lang.Thread.sleep;
 
 public class Capteur extends CapteurAbstrait implements Runnable {
 
-    GenerationValeurAbstrait g;
-    Integer tpsChangement;
-    Thread t;
+    private GenerationValeurAbstrait g;
+    private Integer tpsChangement;
+    private Thread t;
 
     public Capteur(float valeur, String nom, Integer tps, GenerationValeurAbstrait g) {
         super(valeur, nom);
@@ -26,9 +26,5 @@ public class Capteur extends CapteurAbstrait implements Runnable {
         } catch (Exception e) {
             System.out.println("err");
         }
-    }
-
-    public void stop() {
-        t.interrupt();
     }
 }

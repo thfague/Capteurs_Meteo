@@ -20,12 +20,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
 public class AjoutCapteur {
     @FXML
-    GridPane gridAjoutCapteur;
+    private GridPane gridAjoutCapteur;
 
     private VBox vb = new VBox();
     private VBox vbOption = new VBox();
@@ -49,8 +51,8 @@ public class AjoutCapteur {
 
     private ObservableList<CapteurAbstrait> listeTotalCapteur;
     private Map<CapteurAbstrait,Integer> m = new HashMap<>();
-    private CapteurComplexe captComp = new CapteurComplexe(m,"");
-    private Capteur capteur;
+    private CapteurAbstrait captComp = new CapteurComplexe(m,"");
+    private CapteurAbstrait capteur;
     private int choix;
 
     public AjoutCapteur(ObservableList<CapteurAbstrait> l){
@@ -65,7 +67,6 @@ public class AjoutCapteur {
             public void handle(ActionEvent actionEvent) {
                 if(choix == 1 || choix == 2 || choix == 3) {
                     validationCapteur();
-
                 }
                 if(choix == 4) {
                     validationCapteurComplexe();
@@ -81,22 +82,21 @@ public class AjoutCapteur {
 
         comboCapteur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
             if (change.getValue().equals("Capteur")) {
-                AffichageCapteur();
+                affichageCapteur();
             }
             if (change.getValue().equals("CapteurComplexe")) {
-                AffichageCapteurComplexe();
+                affichageCapteurComplexe();
             }
         });
 
-        AffichageCapteur();
+        affichageCapteur();
 
         gridAjoutCapteur.add(vb, 0, 0);
         gridAjoutCapteur.add(vbOption, 1, 1);
         gridAjoutCapteur.add(vbOptionGenerateur, 0, 1);
-
     }
 
-    public void AffichageCapteur()
+    private void affichageCapteur()
     {
         vb.getChildren().clear();
         vbOption.getChildren().clear();
@@ -114,13 +114,13 @@ public class AjoutCapteur {
                 choix = 1;
                 min.setText("Minimum : ");
                 max.setText("Maximum : ");
-                AffichageGenerateur();
+                affichageGenerateur();
             }
             if (change.getValue().equals("Generation Aleatoire Reelle")) {
                 choix = 2;
                 min.setText("Valeur de départ :");
                 max.setText("Valeur de différence");
-                AffichageGenerateur();
+                affichageGenerateur();
             }
             if (change.getValue().equals("Generation Aleatoire Infini")) {
                 choix = 3;
@@ -130,11 +130,11 @@ public class AjoutCapteur {
         });
         min.setText("Minimum : ");
         max.setText("Maximum : ");
-        AffichageGenerateur();
+        affichageGenerateur();
         choix = 1;
     }
 
-    public void AffichageGenerateur()
+    private void affichageGenerateur()
     {
         vbOptionGenerateur.getChildren().clear();
         vbOptionGenerateur.getChildren().add(min);
@@ -144,7 +144,7 @@ public class AjoutCapteur {
         vbOptionGenerateur.getChildren().add(validation);
     }
 
-    public void AffichageCapteurComplexe()
+    private void affichageCapteurComplexe()
     {
         vb.getChildren().clear();
         vbOption.getChildren().clear();
@@ -183,7 +183,7 @@ public class AjoutCapteur {
     private void validationCapteurComplexe() {
         for(int i = 0; i < listeTotalCapteur.size(); i++) {
             if(nomCapteurTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
-                AffichageCapteurComplexe();
+                affichageCapteurComplexe();
                 nomCapteurTF.setText("");
                 vb.getChildren().add(new Text("Nom de capteur déjà pris"));
                 return;
@@ -199,7 +199,7 @@ public class AjoutCapteur {
         GenerationValeurAbstrait g;
         for(int i = 0; i < listeTotalCapteur.size(); i++) {
             if(nomCapteurTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
-                AffichageCapteur();
+                affichageCapteur();
                 nomCapteurTF.setText("");
                 minTF.setText("");
                 maxTF.setText("");
@@ -209,32 +209,32 @@ public class AjoutCapteur {
         }
         if(choix == 1) {
             if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
-                AffichageCapteur();
+                affichageCapteur();
                 nomCapteurTF.setText("");
                 minTF.setText("");
                 maxTF.setText("");
-                vb.getChildren().add(new Text("Les valeurs minimum et maximum doivent être renseignées"));
+                vbOptionGenerateur.getChildren().add(new Text("Les valeurs minimum et maximum doivent être renseignées"));
                 return;
             }
             int valMin = Integer.parseInt(minTF.getText());
             int valMax = Integer.parseInt(maxTF.getText());
             if(valMin >= valMax) {
-                AffichageCapteur();
+                affichageCapteur();
                 nomCapteurTF.setText("");
                 minTF.setText("");
                 maxTF.setText("");
-                vb.getChildren().add(new Text("La valeur minimum doit être inférieur à la valeur maximum"));
+                vbOptionGenerateur.getChildren().add(new Text("La valeur minimum doit être inférieur à la valeur maximum"));
                 return;
             }
             g = new GenerationAleatoireBorne(valMin, valMax);
         }
         else if(choix == 2) {
             if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
-                AffichageCapteur();
+                affichageCapteur();
                 nomCapteurTF.setText("");
                 minTF.setText("");
                 maxTF.setText("");
-                vb.getChildren().add(new Text("Certaines valeurs ne sont pas renseignées"));
+                vbOptionGenerateur.getChildren().add(new Text("Certaines valeurs ne sont pas renseignées"));
                 return;
             }
             int valMin = Integer.parseInt(minTF.getText());

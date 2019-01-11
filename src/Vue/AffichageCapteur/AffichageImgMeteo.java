@@ -11,26 +11,26 @@ import javafx.scene.image.ImageView;
 
 public class AffichageImgMeteo {
     @FXML
-    Text nomCapteur;
+    private Text nomCapteur;
     @FXML
-    ImageView idImg = new ImageView();
-    private FloatProperty val;
+    private ImageView idImg;
     private CapteurAbstrait capteur;
 
     public AffichageImgMeteo(CapteurAbstrait c){
         capteur=c;
-        val = new SimpleFloatProperty();
     }
 
     @FXML
     private void initialize(){
+        nomCapteur.textProperty().bind(capteur.nomProperty());
         Font font = new Font("Arial",18);
         nomCapteur.setFont(font);
+
         Image img1 = new Image("/cielbleu.jpeg");
         Image img2 = new Image("/cielneige.jpg");
         Image img3 = new Image("/cielnuage.jpg");
-        nomCapteur.textProperty().bind(capteur.nomProperty());
 
+        FloatProperty val = new SimpleFloatProperty();
         val.bind(capteur.valeurProperty());
         val.addListener(e-> {
             calculValeur(val, img2, img1, img3);
