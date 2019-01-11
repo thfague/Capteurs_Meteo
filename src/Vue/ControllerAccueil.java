@@ -39,7 +39,7 @@ public class ControllerAccueil {
     GridPane gridAccueil;
 
     Text textCapteur = new Text();
-    List<CapteurAbstrait> l = new ArrayList<>();
+    List<CapteurAbstrait> listeCapteur = new ArrayList<>();
     VBox vb = new VBox();
     ObservableList<CapteurAbstrait> olCapteur;
 
@@ -48,27 +48,27 @@ public class ControllerAccueil {
         GenerationValeurAbstrait g1;
         GenerationValeurAbstrait g2;
         GenerationValeurAbstrait g3;
-        l.add(new Capteur(30, "Capteur 1", 1000, g1 = new GenerationAleatoireBorne(10,20)));
-        l.add(new Capteur(10, "Capteur 2", 2000, g2 = new GenerationAleatoireInfini()));
-        l.add(new Capteur(2, "Capteur 3", 3000, g3 = new GenerationAleatoireReelle(0, 2)));
+        listeCapteur.add(new Capteur(30, "Capteur 1", 1000, g1 = new GenerationAleatoireBorne(10,20)));
+        listeCapteur.add(new Capteur(10, "Capteur 2", 2000, g2 = new GenerationAleatoireInfini()));
+        listeCapteur.add(new Capteur(2, "Capteur 3", 3000, g3 = new GenerationAleatoireReelle(0, 2)));
         Map<CapteurAbstrait,Integer> m = new HashMap<>();
         CapteurComplexe capteurComplexe = new CapteurComplexe(m,"CapteurComplexe 1");
-        capteurComplexe.ajoutCapteur(l.get(0), 1);
-        capteurComplexe.ajoutCapteur(l.get(1), 2);
-        capteurComplexe.ajoutCapteur(l.get(2), 3);
-        l.add(capteurComplexe);
+        capteurComplexe.ajoutCapteur(listeCapteur.get(0), 1);
+        capteurComplexe.ajoutCapteur(listeCapteur.get(1), 2);
+        capteurComplexe.ajoutCapteur(listeCapteur.get(2), 3);
+        listeCapteur.add(capteurComplexe);
 
-        olCapteur = FXCollections.observableList(l);
-        ListView<CapteurAbstrait> listCapteur = new ListView<>(olCapteur);
+        olCapteur = FXCollections.observableList(listeCapteur);
+        ListView<CapteurAbstrait> listeVCapteur = new ListView<>(olCapteur);
 
-        listCapteur.setCellFactory(new Callback<ListView<CapteurAbstrait>, ListCell<CapteurAbstrait>>() {
+        listeVCapteur.setCellFactory(new Callback<ListView<CapteurAbstrait>, ListCell<CapteurAbstrait>>() {
             @Override
             public ListCell<CapteurAbstrait> call(ListView<CapteurAbstrait> param) {
-                return new DigitalFormatCell(l);
+                return new DigitalFormatCell(listeCapteur);
             }
         });
 
-        listCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
+        listeVCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
             textCapteur.setText(nV.getNom());
             vb.getChildren().clear();
 
@@ -102,7 +102,7 @@ public class ControllerAccueil {
             }
         });
 
-        gridAccueil.add(listCapteur, 0, 1);
+        gridAccueil.add(listeVCapteur, 0, 1);
         gridAccueil.add(ajoutCapteur, 0, 0);
         gridAccueil.add(textCapteur, 1, 0);
         gridAccueil.add(vb, 1, 1);
@@ -115,33 +115,33 @@ public class ControllerAccueil {
     }
 
     //Création et ajout d'un bouton pour un type d'affichage
-    public void AffichageBouton(CapteurAbstrait d, String nomButton, String nomFichier, String titreFichier) {
+    public void AffichageBouton(CapteurAbstrait capteur, String nomButton, String nomFichier, String titreFichier) {
         Button b = new Button(nomButton);
         vb.getChildren().add(b);
         b.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                NewWindow(nomFichier, titreFichier, d);
+                NewWindow(nomFichier, titreFichier, capteur);
             }
         });
     }
 
-    public void AffichageBoutonSupprimer(CapteurAbstrait c, ObservableList<CapteurAbstrait> l) {
-        Button b = new Button("Supprimer");
-        vb.getChildren().add(b);
-        b.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+    public void AffichageBoutonSupprimer(CapteurAbstrait capteur, ObservableList<CapteurAbstrait> listeCapteur) {
+        Button button = new Button("Supprimer");
+        vb.getChildren().add(button);
+        button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                l.remove(c);
+                listeCapteur.remove(capteur);
                 Integer i;
-                for (i=0; i < l.size(); i++) {
-                    if(l.get(i) instanceof CapteurComplexe){
-                        if(((CapteurComplexe) l.get(i)).getListeCapteur().containsKey(c)){
-                            ((CapteurComplexe) l.get(i)).getListeCapteur().remove(c);
+                for (i=0; i < listeCapteur.size(); i++) {
+                    if(listeCapteur.get(i) instanceof CapteurComplexe){
+                        if(((CapteurComplexe) listeCapteur.get(i)).getListeCapteur().containsKey(capteur)){
+                            ((CapteurComplexe) listeCapteur.get(i)).getListeCapteur().remove(capteur);
                         }
                     }
                 }
-                if(l.size() == 0) {
+                if(listeCapteur.size() == 0) {
                     textCapteur.setText("");
                     vb.getChildren().clear();
                 }
@@ -149,20 +149,20 @@ public class ControllerAccueil {
         });
     }
 
-    public void NewWindow(String nameFile, String title, CapteurAbstrait d)
+    public void NewWindow(String nomFichier, String titre, CapteurAbstrait capteur)
     {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(nameFile));
-            switch (nameFile) {
-                case "AffichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(d)); break;
-                case "AffichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(d)); break;
-                case "AffichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(d)); break;
-                case "affichageConfig.fxml": loader.setController(new AffichageConfig((CapteurComplexe)d, olCapteur)); break;
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(nomFichier));
+            switch (nomFichier) {
+                case "AffichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(capteur)); break;
+                case "AffichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(capteur)); break;
+                case "AffichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(capteur)); break;
+                case "affichageConfig.fxml": loader.setController(new AffichageConfig((CapteurComplexe)capteur, olCapteur)); break;
             }
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.initOwner(gridAccueil.getScene().getWindow());
-            stage.setTitle(title);
+            stage.setTitle(titre);
             stage.setScene(new Scene(root, 500, 400));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();

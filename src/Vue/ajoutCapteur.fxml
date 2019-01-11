@@ -2,7 +2,7 @@
 
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="gridAjoutC"
+<GridPane fx:id="gridAjoutCapteur"
           xmlns:fx="http://javafx.com/fxml"
           prefHeight="400.0" prefWidth="600.0">
 

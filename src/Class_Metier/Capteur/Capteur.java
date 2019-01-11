@@ -7,14 +7,14 @@ public class Capteur extends CapteurAbstrait implements Runnable {
 
     GenerationValeurAbstrait g;
     Integer tpsChangement;
-    Thread fred;
+    Thread t;
 
     public Capteur(float valeur, String nom, Integer tps, GenerationValeurAbstrait g) {
         super(valeur, nom);
         tpsChangement = tps;
         this.g = g;
-        fred = new Thread(this);
-        fred.start();
+        t = new Thread(this);
+        t.start();
     }
 
     public void run() {
@@ -29,6 +29,6 @@ public class Capteur extends CapteurAbstrait implements Runnable {
     }
 
     public void stop() {
-        fred.interrupt();
+        t.interrupt();
     }
 }

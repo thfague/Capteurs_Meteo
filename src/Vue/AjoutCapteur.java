@@ -7,9 +7,6 @@ import Class_Metier.Generateur.GenerationAleatoireBorne;
 import Class_Metier.Generateur.GenerationAleatoireInfini;
 import Class_Metier.Generateur.GenerationAleatoireReelle;
 import Class_Metier.Generateur.GenerationValeurAbstrait;
-import Vue.AffichageCapteur.AffichageDigital;
-import Vue.AffichageCapteur.AffichageImgMeteo;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,51 +20,46 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-
 import java.io.IOException;
 import java.util.*;
 
-import static javafx.application.Platform.exit;
-import static javafx.application.Platform.isImplicitExit;
-
 public class AjoutCapteur {
     @FXML
-    GridPane gridAjoutC;
+    GridPane gridAjoutCapteur;
 
     private VBox vb = new VBox();
     private VBox vbOption = new VBox();
     private VBox vbOptionGenerateur = new VBox();
 
-    private Text nomC = new Text();
+    private Text nomCapteur = new Text();
     private Text tps = new Text("Temps de changement (en seconde) : ");
     private Text min = new Text();
     private Text max = new Text();
 
     private TextField minTF = new TextField();
     private TextField maxTF = new TextField();
-    private TextField nomCapteur = new TextField();
-    private Spinner<Integer> tpsTF = new Spinner<>();
-    private SpinnerValueFactory val = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1);
+    private TextField nomCapteurTF = new TextField();
+    private Spinner<Integer> tpsSpinner = new Spinner<>();
+    private SpinnerValueFactory valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1);
 
     private ComboBox comboCapteur = new ComboBox();
     private ComboBox comboGenerateur = new ComboBox();
 
     private Button validation = new Button("Valider");
 
-    private ObservableList<CapteurAbstrait> listTotalCapteur;
+    private ObservableList<CapteurAbstrait> listeTotalCapteur;
     private Map<CapteurAbstrait,Integer> m = new HashMap<>();
-    private CapteurComplexe cc = new CapteurComplexe(m,"");
-    private Capteur c;
+    private CapteurComplexe captComp = new CapteurComplexe(m,"");
+    private Capteur capteur;
     private int choix;
 
     public AjoutCapteur(ObservableList<CapteurAbstrait> l){
-        listTotalCapteur = l;
+        listeTotalCapteur = l;
     }
 
     @FXML
     public void initialize (){
-        tpsTF.setValueFactory(val);
+        tpsSpinner.setValueFactory(valSpinner);
         validation.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -98,9 +90,9 @@ public class AjoutCapteur {
 
         AffichageCapteur();
 
-        gridAjoutC.add(vb, 0, 0);
-        gridAjoutC.add(vbOption, 1, 1);
-        gridAjoutC.add(vbOptionGenerateur, 0, 1);
+        gridAjoutCapteur.add(vb, 0, 0);
+        gridAjoutCapteur.add(vbOption, 1, 1);
+        gridAjoutCapteur.add(vbOptionGenerateur, 0, 1);
 
     }
 
@@ -111,11 +103,11 @@ public class AjoutCapteur {
         vbOptionGenerateur.getChildren().clear();
 
         vb.getChildren().add(comboCapteur);
-        nomC.setText("Nom du capteur : ");
-        vb.getChildren().add(nomC);
+        nomCapteur.setText("Nom du capteur : ");
         vb.getChildren().add(nomCapteur);
+        vb.getChildren().add(nomCapteurTF);
         vb.getChildren().add(tps);
-        vb.getChildren().add(tpsTF);
+        vb.getChildren().add(tpsSpinner);
         vb.getChildren().add(comboGenerateur);
         comboGenerateur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
             if (nV.equals("Generation Aleatoire Borne")) {
@@ -159,9 +151,9 @@ public class AjoutCapteur {
         vbOptionGenerateur.getChildren().clear();
 
         vb.getChildren().add(comboCapteur);
-        nomC.setText("Nom du capteur complexe : ");
-        vb.getChildren().add(nomC);
+        nomCapteur.setText("Nom du capteur complexe : ");
         vb.getChildren().add(nomCapteur);
+        vb.getChildren().add(nomCapteurTF);
 
         Button buttonConfig = new Button("Configurer la liste de capteur");
         vb.getChildren().add(buttonConfig);
@@ -170,10 +162,10 @@ public class AjoutCapteur {
             public void handle(ActionEvent actionEvent) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("affichageConfig.fxml"));
-                    loader.setController(new AffichageConfig((CapteurComplexe)cc, listTotalCapteur));
+                    loader.setController(new AffichageConfig((CapteurComplexe)captComp, listeTotalCapteur));
                     Parent root = loader.load();
                     Stage stage = new Stage();
-                    stage.initOwner(gridAjoutC.getScene().getWindow());
+                    stage.initOwner(gridAjoutCapteur.getScene().getWindow());
                     stage.setTitle("Configuration Capteur Complexe");
                     stage.setScene(new Scene(root, 500, 400));
                     stage.initModality(Modality.APPLICATION_MODAL);
@@ -189,26 +181,26 @@ public class AjoutCapteur {
     }
 
     private void validationCapteurComplexe() {
-        for(int i = 0; i < listTotalCapteur.size(); i++) {
-            if(nomCapteur.getText().equals(listTotalCapteur.get(i).getNom())) {
+        for(int i = 0; i < listeTotalCapteur.size(); i++) {
+            if(nomCapteurTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
                 AffichageCapteurComplexe();
-                nomCapteur.setText("");
+                nomCapteurTF.setText("");
                 vb.getChildren().add(new Text("Nom de capteur déjà pris"));
                 return;
             }
         }
-        cc.setNom(nomCapteur.getText());
-        listTotalCapteur.add(cc);
+        captComp.setNom(nomCapteurTF.getText());
+        listeTotalCapteur.add(captComp);
         Stage stage = (Stage) validation.getScene().getWindow();
         stage.close();
     }
 
     private void validationCapteur() {
         GenerationValeurAbstrait g;
-        for(int i = 0; i < listTotalCapteur.size(); i++) {
-            if(nomCapteur.getText().equals(listTotalCapteur.get(i).getNom())) {
+        for(int i = 0; i < listeTotalCapteur.size(); i++) {
+            if(nomCapteurTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
                 AffichageCapteur();
-                nomCapteur.setText("");
+                nomCapteurTF.setText("");
                 minTF.setText("");
                 maxTF.setText("");
                 vbOptionGenerateur.getChildren().add(new Text("Nom de capteur déjà pris"));
@@ -216,11 +208,19 @@ public class AjoutCapteur {
             }
         }
         if(choix == 1) {
+            if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
+                AffichageCapteur();
+                nomCapteurTF.setText("");
+                minTF.setText("");
+                maxTF.setText("");
+                vb.getChildren().add(new Text("Les valeurs minimum et maximum doivent être renseignées"));
+                return;
+            }
             int valMin = Integer.parseInt(minTF.getText());
             int valMax = Integer.parseInt(maxTF.getText());
             if(valMin >= valMax) {
                 AffichageCapteur();
-                nomCapteur.setText("");
+                nomCapteurTF.setText("");
                 minTF.setText("");
                 maxTF.setText("");
                 vb.getChildren().add(new Text("La valeur minimum doit être inférieur à la valeur maximum"));
@@ -229,6 +229,14 @@ public class AjoutCapteur {
             g = new GenerationAleatoireBorne(valMin, valMax);
         }
         else if(choix == 2) {
+            if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
+                AffichageCapteur();
+                nomCapteurTF.setText("");
+                minTF.setText("");
+                maxTF.setText("");
+                vb.getChildren().add(new Text("Certaines valeurs ne sont pas renseignées"));
+                return;
+            }
             int valMin = Integer.parseInt(minTF.getText());
             int valMax = Integer.parseInt(maxTF.getText());
             g = new GenerationAleatoireReelle(valMin, valMax);
@@ -236,8 +244,8 @@ public class AjoutCapteur {
         else {
             g = new GenerationAleatoireInfini();
         }
-        c = new Capteur(0,nomCapteur.getText(),tpsTF.getValue()*1000,g);
-        listTotalCapteur.add(c);
+        capteur = new Capteur(0,nomCapteurTF.getText(),tpsSpinner.getValue()*1000,g);
+        listeTotalCapteur.add(capteur);
         Stage stage = (Stage) validation.getScene().getWindow();
         stage.close();
     }

@@ -6,23 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DigitalFormatCell extends ListCell<CapteurAbstrait> {
-    List<CapteurAbstrait> list = new ArrayList<>();
+    List<CapteurAbstrait> listeCapteur = new ArrayList<>();
 
-    public DigitalFormatCell(List<CapteurAbstrait> l) {
-        for(int i = 0; i < l.size(); i++) {
-            list.add(l.get(i));
+    public DigitalFormatCell(List<CapteurAbstrait> listeCapteur2) {
+        for(int i = 0; i < listeCapteur2.size(); i++) {
+            listeCapteur.add(listeCapteur2.get(i));
         }
     }
 
     @Override
-    public void updateItem(CapteurAbstrait item, boolean empty) {
-        super.updateItem(item, empty);
+    public void updateItem(CapteurAbstrait capteur, boolean vide) {
+        super.updateItem(capteur, vide);
 
-        if (empty || item == null) {
+        if (vide || capteur == null) {
             setText(null);
             setGraphic(null);
         } else {
-            setText(item.getNom());
+            setText(capteur.getNom());
         }
     }
 }

@@ -12,25 +12,25 @@ import javafx.util.converter.NumberStringConverter;
 
 public class AffichageDigital {
     @FXML
-    private Text NomCapteur;
+    private Text nomCapteur;
     @FXML
-    private TextField ValeurCapteur;
-    private CapteurAbstrait digital;
+    private TextField valeurCapteur;
+    private CapteurAbstrait capteur;
 
-    public AffichageDigital(CapteurAbstrait  d){
-        digital=d;
+    public AffichageDigital(CapteurAbstrait  c){
+        capteur=c;
     }
 
     @FXML
     private void initialize(){
-        NomCapteur.textProperty().bind(digital.nomProperty());
+        nomCapteur.textProperty().bind(capteur.nomProperty());
         Font font = new Font("Arial", 18);
-        NomCapteur.setFont(font);
-        if (digital instanceof Capteur) {
-            ValeurCapteur.textProperty().bindBidirectional(digital.valeurProperty(), new NumberStringConverter());
+        nomCapteur.setFont(font);
+        if (capteur instanceof Capteur) {
+            valeurCapteur.textProperty().bindBidirectional(capteur.valeurProperty(), new NumberStringConverter());
         }
-        if (digital instanceof CapteurComplexe) {
-            ValeurCapteur.textProperty().bind(digital.valeurProperty().asString());
+        if (capteur instanceof CapteurComplexe) {
+            valeurCapteur.textProperty().bind(capteur.valeurProperty().asString());
         }
     }
 }
