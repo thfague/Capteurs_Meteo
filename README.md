@@ -32,6 +32,7 @@ Semaine 3:
 
 
 IMPORTANT : QUALITE DU CODE !!!
+ENLEVER TOUS CE QUI EST SURLIGNé !! (ctrl+espace peut aider)
 
 
 A FAIRE :
@@ -43,15 +44,3 @@ POSSIBLE AMELIORATION :
     * Stylisé l'application
     * tous capteur peut modifié son nom
     *** on peut ajouter un capteur inexistant à un capteur complexe --> FAIT MAIS PB : liste vide ajout capteur complexe dans ajout capteur inexistant
-
-
-
-
-
-
-
-
-
-
-
-

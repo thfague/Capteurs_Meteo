@@ -8,7 +8,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("Vue/accueil.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("vue/accueil.fxml"));
         primaryStage.setTitle("Meteo");
         primaryStage.setScene(new Scene(root, 600, 350));
         primaryStage.show();

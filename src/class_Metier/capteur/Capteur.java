@@ -1,6 +1,6 @@
-package Class_Metier.Capteur;
+package class_Metier.capteur;
 
-import Class_Metier.Generateur.GenerationValeurAbstrait;
+import class_Metier.generateur.GenerationValeurAbstrait;
 import static java.lang.Thread.sleep;
 
 public class Capteur extends CapteurAbstrait implements Runnable {
@@ -15,6 +15,14 @@ public class Capteur extends CapteurAbstrait implements Runnable {
         this.g = g;
         t = new Thread(this);
         t.start();
+    }
+
+    public GenerationValeurAbstrait getGenerationValeur() {
+        return g;
+    }
+
+    public Integer getTpsChangement() {
+        return tpsChangement;
     }
 
     public void run() {

@@ -1,6 +1,6 @@
-package Vue.AffichageCapteur;
+package vue.affichageCapteur;
 
-import Class_Metier.Capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurAbstrait;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 

@@ -1,4 +1,4 @@
-package Class_Metier.Generateur;
+package class_Metier.generateur;
 
 import java.util.Random;
 

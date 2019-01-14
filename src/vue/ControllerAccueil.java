@@ -1,15 +1,15 @@
-package Vue;
+package vue;
 
-import Class_Metier.Capteur.Capteur;
-import Class_Metier.Capteur.CapteurAbstrait;
-import Class_Metier.Capteur.CapteurComplexe;
-import Class_Metier.Generateur.GenerationAleatoireBorne;
-import Class_Metier.Generateur.GenerationAleatoireInfini;
-import Class_Metier.Generateur.GenerationAleatoireReelle;
-import Class_Metier.Generateur.GenerationValeurAbstrait;
-import Vue.AffichageCapteur.AffichageDigital;
-import Vue.AffichageCapteur.AffichageImgMeteo;
-import Vue.AffichageCapteur.AffichageThermo;
+import class_Metier.capteur.Capteur;
+import class_Metier.capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurComplexe;
+import class_Metier.generateur.GenerationAleatoireBorne;
+import class_Metier.generateur.GenerationAleatoireInfini;
+import class_Metier.generateur.GenerationAleatoireReelle;
+import class_Metier.generateur.GenerationValeurAbstrait;
+import vue.affichageCapteur.AffichageDigital;
+import vue.affichageCapteur.AffichageImgMeteo;
+import vue.affichageCapteur.AffichageThermo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +24,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -61,12 +60,10 @@ public class ControllerAccueil {
             textCapteur.setText(nV.getNom());
             vb.getChildren().clear();
 
-            affichageBouton(nV, "Affichage digital", "AffichageCapteur/affichageDigital.fxml", "Affichage format digital");
-            affichageBouton(nV, "Affichage par thermomètre", "AffichageCapteur/affichageThermo.fxml", "Affichage format thermomètre");
-            affichageBouton(nV, "Affichage imagé", "AffichageCapteur/affichageImgMeteo.fxml", "Affichage format image");
-            if(nV instanceof CapteurComplexe) {
-                affichageBouton(nV, "Configuration", "affichageConfig.fxml", "Configuration Capteur Complexe");
-            }
+            affichageBouton(nV, "Affichage digital", "affichageCapteur/affichageDigital.fxml", "Affichage format digital");
+            affichageBouton(nV, "Affichage par thermomètre", "affichageCapteur/affichageThermo.fxml", "Affichage format thermomètre");
+            affichageBouton(nV, "Affichage imagé", "affichageCapteur/affichageImgMeteo.fxml", "Affichage format image");
+            affichageBouton(nV, "Configuration", "affichageConfig.fxml", "Configuration capteur");
             affichageBoutonSupprimer(nV, olCapteur);
         });
 
@@ -107,16 +104,15 @@ public class ControllerAccueil {
         GenerationValeurAbstrait g1;
         GenerationValeurAbstrait g2;
         GenerationValeurAbstrait g3;
-        listeCapteur.add(new Capteur(30, "Capteur 1", 1000, g1 = new GenerationAleatoireBorne(10,20)));
-        listeCapteur.add(new Capteur(10, "Capteur 2", 2000, g2 = new GenerationAleatoireInfini()));
-        listeCapteur.add(new Capteur(2, "Capteur 3", 3000, g3 = new GenerationAleatoireReelle(0, 2)));
+        listeCapteur.add(new Capteur(30, "capteur 1", 1000, g1 = new GenerationAleatoireBorne(10,20)));
+        listeCapteur.add(new Capteur(10, "capteur 2", 2000, g2 = new GenerationAleatoireInfini()));
+        listeCapteur.add(new Capteur(2, "capteur 3", 3000, g3 = new GenerationAleatoireReelle(0, 2)));
         Map<CapteurAbstrait,Integer> mapCapteur = new HashMap<>();
         CapteurComplexe capteurComplexe = new CapteurComplexe(mapCapteur,"CapteurComplexe 1");
         capteurComplexe.ajoutCapteur(listeCapteur.get(0), 1);
         capteurComplexe.ajoutCapteur(listeCapteur.get(1), 2);
         capteurComplexe.ajoutCapteur(listeCapteur.get(2), 3);
         listeCapteur.add(capteurComplexe);
-
     }
 
     //Création et ajout d'un bouton pour un type d'affichage
@@ -158,10 +154,13 @@ public class ControllerAccueil {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nomFichier));
             switch (nomFichier) {
-                case "AffichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(capteur)); break;
-                case "AffichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(capteur)); break;
-                case "AffichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(capteur)); break;
-                case "affichageConfig.fxml": loader.setController(new AffichageConfig((CapteurComplexe)capteur, olCapteur)); break;
+                case "affichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(capteur)); break;
+                case "affichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(capteur)); break;
+                case "affichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(capteur)); break;
+                case "affichageConfig.fxml":
+                    if(capteur instanceof CapteurComplexe) { loader.setController(new AffichageConfigCaptComp((CapteurComplexe) capteur, olCapteur)); }
+                    else { loader.setController(new AffichageConfigCapt((Capteur) capteur)); }
+                    break;
             }
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -174,6 +173,5 @@ public class ControllerAccueil {
         catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

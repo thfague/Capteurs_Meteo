@@ -1,7 +1,7 @@
-package Vue;
+package vue;
 
-import Class_Metier.Capteur.CapteurAbstrait;
-import Class_Metier.Capteur.CapteurComplexe;
+import class_Metier.capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurComplexe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +23,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.util.*;
 
-public class AffichageConfig {
+public class AffichageConfigCaptComp {
     @FXML
     private GridPane gridConfig;
 
@@ -42,7 +42,7 @@ public class AffichageConfig {
     private Spinner<Integer> coeffSpinner = new Spinner<>();
     private SpinnerValueFactory valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1);
 
-    public AffichageConfig(CapteurComplexe  c, List<CapteurAbstrait> l){
+    public AffichageConfigCaptComp(CapteurComplexe  c, List<CapteurAbstrait> l){
         capteur=c;
         listeTotalCapteur = l;
     }
@@ -166,10 +166,10 @@ public class AffichageConfig {
         buttonAjout.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-               capteur.ajoutCapteur(c, coeffSpinner.getValue());
-               chargementCapteurLie();
-               vb.getChildren().clear();
-               boutonAjouterC();
+                capteur.ajoutCapteur(c, coeffSpinner.getValue());
+                chargementCapteurLie();
+                vb.getChildren().clear();
+                boutonAjouterC();
             }
         });
     }

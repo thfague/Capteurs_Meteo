@@ -1,6 +1,6 @@
 <?import javafx.scene.layout.GridPane?>
 
-<GridPane fx:id="gridAccueil" fx:controller="Vue.ControllerAccueil"
+<GridPane fx:id="gridAccueil" fx:controller="vue.ControllerAccueil"
           xmlns:fx="http://javafx.com/fxml">
 
 </GridPane>

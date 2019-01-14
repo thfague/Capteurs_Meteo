@@ -1,8 +1,7 @@
-package Vue;
+package vue;
 
-import Class_Metier.Capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurAbstrait;
 import javafx.scene.control.ListCell;
-import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.List;

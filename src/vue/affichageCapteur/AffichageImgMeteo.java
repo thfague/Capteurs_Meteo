@@ -1,6 +1,6 @@
-package Vue.AffichageCapteur;
+package vue.affichageCapteur;
 
-import Class_Metier.Capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurAbstrait;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.fxml.FXML;

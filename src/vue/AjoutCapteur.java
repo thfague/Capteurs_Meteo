@@ -1,12 +1,12 @@
-package Vue;
+package vue;
 
-import Class_Metier.Capteur.Capteur;
-import Class_Metier.Capteur.CapteurAbstrait;
-import Class_Metier.Capteur.CapteurComplexe;
-import Class_Metier.Generateur.GenerationAleatoireBorne;
-import Class_Metier.Generateur.GenerationAleatoireInfini;
-import Class_Metier.Generateur.GenerationAleatoireReelle;
-import Class_Metier.Generateur.GenerationValeurAbstrait;
+import class_Metier.capteur.Capteur;
+import class_Metier.capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurComplexe;
+import class_Metier.generateur.GenerationAleatoireBorne;
+import class_Metier.generateur.GenerationAleatoireInfini;
+import class_Metier.generateur.GenerationAleatoireReelle;
+import class_Metier.generateur.GenerationValeurAbstrait;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,7 +21,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -30,7 +29,7 @@ public class AjoutCapteur {
     private GridPane gridAjoutCapteur;
 
     private VBox vb = new VBox();
-    private VBox vbOption = new VBox();
+    //private VBox vbOption = new VBox();
     private VBox vbOptionGenerateur = new VBox();
 
     private Text nomCapteur = new Text();
@@ -74,14 +73,14 @@ public class AjoutCapteur {
             }
         });
 
-        comboCapteur.getItems().addAll("Capteur", "CapteurComplexe");
+        comboCapteur.getItems().addAll("capteur", "CapteurComplexe");
         comboCapteur.getSelectionModel().selectFirst();
 
         comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
         comboGenerateur.getSelectionModel().selectFirst();
 
         comboCapteur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
-            if (change.getValue().equals("Capteur")) {
+            if (change.getValue().equals("capteur")) {
                 affichageCapteur();
             }
             if (change.getValue().equals("CapteurComplexe")) {
@@ -92,14 +91,14 @@ public class AjoutCapteur {
         affichageCapteur();
 
         gridAjoutCapteur.add(vb, 0, 0);
-        gridAjoutCapteur.add(vbOption, 1, 1);
+        //gridAjoutCapteur.add(vbOption, 1, 1);
         gridAjoutCapteur.add(vbOptionGenerateur, 0, 1);
     }
 
     private void affichageCapteur()
     {
         vb.getChildren().clear();
-        vbOption.getChildren().clear();
+        //vbOption.getChildren().clear();
         vbOptionGenerateur.getChildren().clear();
 
         vb.getChildren().add(comboCapteur);
@@ -147,7 +146,7 @@ public class AjoutCapteur {
     private void affichageCapteurComplexe()
     {
         vb.getChildren().clear();
-        vbOption.getChildren().clear();
+        //vbOption.getChildren().clear();
         vbOptionGenerateur.getChildren().clear();
 
         vb.getChildren().add(comboCapteur);
@@ -162,11 +161,11 @@ public class AjoutCapteur {
             public void handle(ActionEvent actionEvent) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("affichageConfig.fxml"));
-                    loader.setController(new AffichageConfig((CapteurComplexe)captComp, listeTotalCapteur));
+                    loader.setController(new AffichageConfigCaptComp((CapteurComplexe)captComp, listeTotalCapteur));
                     Parent root = loader.load();
                     Stage stage = new Stage();
                     stage.initOwner(gridAjoutCapteur.getScene().getWindow());
-                    stage.setTitle("Configuration Capteur Complexe");
+                    stage.setTitle("Configuration capteur Complexe");
                     stage.setScene(new Scene(root, 500, 400));
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.show();

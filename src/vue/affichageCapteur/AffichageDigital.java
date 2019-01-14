@@ -1,8 +1,8 @@
-package Vue.AffichageCapteur;
+package vue.affichageCapteur;
 
-import Class_Metier.Capteur.Capteur;
-import Class_Metier.Capteur.CapteurAbstrait;
-import Class_Metier.Capteur.CapteurComplexe;
+import class_Metier.capteur.Capteur;
+import class_Metier.capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurComplexe;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;

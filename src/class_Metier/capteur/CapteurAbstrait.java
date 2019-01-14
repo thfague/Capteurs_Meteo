@@ -1,4 +1,4 @@
-package Class_Metier.Capteur;
+package class_Metier.capteur;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
