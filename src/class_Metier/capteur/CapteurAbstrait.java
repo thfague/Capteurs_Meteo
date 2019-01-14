@@ -6,11 +6,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import java.util.Observable;
 
-public abstract class CapteurAbstrait extends Observable {
+public abstract class  CapteurAbstrait extends Observable {
 
     private FloatProperty valeur = new SimpleFloatProperty();
-    public float getValeur() { return this.valeur.get(); }
-    public void setValeur(float valeur) { this.valeur.set(valeur); setChanged(); notifyObservers(); }
+    float getValeur() { return this.valeur.get(); }
+    void setValeur(float valeur) { this.valeur.set(valeur); setChanged(); notifyObservers(); }
     public FloatProperty valeurProperty() { return this.valeur; }
 
     private StringProperty nom = new SimpleStringProperty();

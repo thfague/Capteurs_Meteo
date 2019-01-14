@@ -22,10 +22,9 @@ public class CapteurComplexe extends CapteurAbstrait implements Observer {
         else {
             Set<Map.Entry<CapteurAbstrait, Integer>> setListeCapteur = this.listeCapteur.entrySet();
             Iterator<Map.Entry<CapteurAbstrait, Integer>> it = setListeCapteur.iterator();
-            while (it.hasNext()) {
-                Map.Entry<CapteurAbstrait, Integer> e = it.next();
-                sommeCoeff = sommeCoeff + e.getValue();
-                valeur = valeur + e.getKey().getValeur() * e.getValue();
+            for (Map.Entry<CapteurAbstrait, Integer> m: setListeCapteur) {
+                sommeCoeff = sommeCoeff + m.getValue();
+                valeur = valeur + m.getKey().getValeur() * m.getValue();
             }
             return valeur / sommeCoeff;
         }

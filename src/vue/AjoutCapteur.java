@@ -29,7 +29,6 @@ public class AjoutCapteur {
     private GridPane gridAjoutCapteur;
 
     private VBox vb = new VBox();
-    //private VBox vbOption = new VBox();
     private VBox vbOptionGenerateur = new VBox();
 
     private Text nomCapteur = new Text();
@@ -41,26 +40,25 @@ public class AjoutCapteur {
     private TextField maxTF = new TextField();
     private TextField nomCapteurTF = new TextField();
     private Spinner<Integer> tpsSpinner = new Spinner<>();
-    private SpinnerValueFactory valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1);
 
     private ComboBox comboCapteur = new ComboBox();
     private ComboBox comboGenerateur = new ComboBox();
 
-    private Button validation = new Button("Valider");
+    private Button validation;
 
     private ObservableList<CapteurAbstrait> listeTotalCapteur;
     private Map<CapteurAbstrait,Integer> m = new HashMap<>();
     private CapteurAbstrait captComp = new CapteurComplexe(m,"");
-    private CapteurAbstrait capteur;
     private int choix;
 
-    public AjoutCapteur(ObservableList<CapteurAbstrait> l){
+    AjoutCapteur(ObservableList<CapteurAbstrait> l){
         listeTotalCapteur = l;
     }
 
     @FXML
     public void initialize (){
-        tpsSpinner.setValueFactory(valSpinner);
+        validation = new Button("Valider");
+        tpsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
         validation.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -72,8 +70,7 @@ public class AjoutCapteur {
                 }
             }
         });
-
-        comboCapteur.getItems().addAll("capteur", "CapteurComplexe");
+        comboCapteur.getItems().addAll("capteur","capteurComplexe");
         comboCapteur.getSelectionModel().selectFirst();
 
         comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
@@ -196,8 +193,8 @@ public class AjoutCapteur {
 
     private void validationCapteur() {
         GenerationValeurAbstrait g;
-        for(int i = 0; i < listeTotalCapteur.size(); i++) {
-            if(nomCapteurTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
+        for(CapteurAbstrait c : listeTotalCapteur) {
+            if(nomCapteurTF.getText().equals(c.getNom())) {
                 affichageCapteur();
                 nomCapteurTF.setText("");
                 minTF.setText("");
@@ -243,7 +240,7 @@ public class AjoutCapteur {
         else {
             g = new GenerationAleatoireInfini();
         }
-        capteur = new Capteur(0,nomCapteurTF.getText(),tpsSpinner.getValue()*1000,g);
+        CapteurAbstrait capteur = new Capteur(0,nomCapteurTF.getText(),tpsSpinner.getValue()*1000,g);
         listeTotalCapteur.add(capteur);
         Stage stage = (Stage) validation.getScene().getWindow();
         stage.close();

@@ -29,15 +29,9 @@ Semaine 3:
 **On veut visualiser ces capteurs sous forme hiérarchique et pouvoir continuer à les configurer comme avant.
 **Pour les capteurs complexes cela voudra dire pouvoir ajouter un s/s capteur et pouvoir changer son coefficient à associer
 
-
-
-IMPORTANT : QUALITE DU CODE !!!
-ENLEVER TOUS CE QUI EST SURLIGNé !! (ctrl+espace peut aider)
-
-
 A FAIRE :
-    * un capteur simple peut modifié sa méthode de génération de valeur et son temps de chamgement
-
+    un capteur peut modifier son nom
+    ajouter un capteur utilise AffichageConfigCapt
 
 POSSIBLE AMELIORATION :
     * Verification : ne pas pour mettre de string dans minimun et max dans ajouter un capteur

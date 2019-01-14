@@ -7,6 +7,7 @@ import class_Metier.generateur.GenerationAleatoireBorne;
 import class_Metier.generateur.GenerationAleatoireInfini;
 import class_Metier.generateur.GenerationAleatoireReelle;
 import class_Metier.generateur.GenerationValeurAbstrait;
+import javafx.scene.control.ComboBox;
 import vue.affichageCapteur.AffichageDigital;
 import vue.affichageCapteur.AffichageImgMeteo;
 import vue.affichageCapteur.AffichageThermo;
@@ -15,7 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -41,6 +41,7 @@ public class ControllerAccueil {
     private List<CapteurAbstrait> listeCapteur = new ArrayList<>();
     private VBox vb = new VBox();
     private ObservableList<CapteurAbstrait> olCapteur;
+    private ComboBox comboCapteur = new ComboBox();
 
     @FXML
     public void initialize (){
@@ -67,35 +68,30 @@ public class ControllerAccueil {
             affichageBoutonSupprimer(nV, olCapteur);
         });
 
+        comboCapteur.getItems().add("capteur");
+        comboCapteur.getItems().add("capteurComplexe");
+        comboCapteur.getSelectionModel().selectFirst();
         Button ajoutCapteur = new Button("Ajouter un capteur");
+        vb.getChildren().add(ajoutCapteur);
         ajoutCapteur.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("ajoutCapteur.fxml"));
-                    loader.setController(new AjoutCapteur(olCapteur));
-                    Parent root = loader.load();
-                    Stage stage = new Stage();
-                    stage.initOwner(gridAccueil.getScene().getWindow());
-                    stage.setTitle(ajoutCapteur.getText());
-                    stage.setScene(new Scene(root, 500, 400));
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.show();
+                if(comboCapteur.getSelectionModel().equals("capteur")) {
+                    newWindow("affichageConfig.fxml", "Configuration", new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)));
                 }
-                catch (IOException e) {
-                    e.printStackTrace();
+                if(comboCapteur.getSelectionModel().equals("capteurComplexe")) {
+                    newWindow("affichageConfig.fxml", "Configuration", new CapteurComplexe(new HashMap<>(), ""));
                 }
             }
         });
 
-        gridAccueil.add(listeVCapteur, 0, 1);
-        gridAccueil.add(ajoutCapteur, 0, 0);
+        gridAccueil.add(listeVCapteur, 0, 2);
+        gridAccueil.add(comboCapteur,0,0);
+        gridAccueil.add(ajoutCapteur,0,1);
         gridAccueil.add(textCapteur, 1, 0);
-        gridAccueil.add(vb, 1, 1);
+        gridAccueil.add(vb, 1, 2);
 
         vb.setAlignment(Pos.TOP_CENTER);
-        gridAccueil.setHalignment(textCapteur, HPos.CENTER);
-        gridAccueil.setHalignment(ajoutCapteur, HPos.CENTER);
         Font font = new Font("Arial",18);
         textCapteur.setFont(font);
     }
@@ -134,10 +130,10 @@ public class ControllerAccueil {
             @Override
             public void handle(ActionEvent actionEvent) {
                 listeCapteur.remove(capteur);
-                for (int i=0; i < listeCapteur.size(); i++) {
-                    if(listeCapteur.get(i) instanceof CapteurComplexe){
-                        if(((CapteurComplexe) listeCapteur.get(i)).getListeCapteur().containsKey(capteur)){
-                            ((CapteurComplexe) listeCapteur.get(i)).getListeCapteur().remove(capteur);
+                for(CapteurAbstrait c : listeCapteur) {
+                    if(c instanceof CapteurComplexe){
+                        if(((CapteurComplexe) c).getListeCapteur().containsKey(capteur)){
+                            ((CapteurComplexe) c).getListeCapteur().remove(capteur);
                         }
                     }
                 }

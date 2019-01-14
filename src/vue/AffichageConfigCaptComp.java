@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -27,62 +25,57 @@ public class AffichageConfigCaptComp {
     @FXML
     private GridPane gridConfig;
 
-    private CapteurComplexe capteur;
+    public CapteurComplexe capteur;
     private List<CapteurAbstrait> listeTotalCapteur;
-
     private VBox vb = new VBox();
-    private Text nomCapteur = new Text();
-    private List<CapteurAbstrait> listeCapteurLié = new ArrayList<>();
-    private List<Integer> listeCapteurLiéCoeff = new ArrayList<>();
-    private List<CapteurAbstrait> listeCapteurNonLié;
+    private List<CapteurAbstrait> listeCapteurLie;
+    private List<Integer> listeCapteurLieCoeff;
     private ObservableList<CapteurAbstrait> observablelListeCapteur;
     private ObservableList<CapteurAbstrait> oCapteur;
-    private Text coeffTxt = new Text("Coefficient : ");
+    private Text coeffTxt;
+    private Spinner<Integer> coeffSpinner;
 
-    private Spinner<Integer> coeffSpinner = new Spinner<>();
-    private SpinnerValueFactory valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1);
-
-    public AffichageConfigCaptComp(CapteurComplexe  c, List<CapteurAbstrait> l){
+    AffichageConfigCaptComp(CapteurComplexe  c, List<CapteurAbstrait> l){
         capteur=c;
         listeTotalCapteur = l;
     }
 
     @FXML
     private void initialize() {
+        Text nomCapteur = new Text();
         nomCapteur.setText(capteur.getNom());
         Font font = new Font("Arial", 18);
         nomCapteur.setFont(font);
-
-        coeffSpinner.valueFactoryProperty().setValue(valSpinner);
+        coeffTxt = new Text("Coefficient : ");
+        coeffSpinner = new Spinner<>();
+        coeffSpinner.valueFactoryProperty().setValue(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
 
         boutonAjouterC();
         chargementCapteurLie();
 
         gridConfig.add(nomCapteur,0, 0);
         gridConfig.add(vb, 1, 1);
-        gridConfig.setHalignment(nomCapteur, HPos.CENTER);
-
     }
 
     //Méthode qui charge tous les capteurs liés au capteur complexe
     private void chargementCapteurLie() {
-        listeCapteurLié.clear();
-        listeCapteurLiéCoeff.clear();
+        listeCapteurLieCoeff = new ArrayList<>();
+        listeCapteurLie = new ArrayList<>();
         Set<Map.Entry<CapteurAbstrait, Integer>> setListeCapteur = capteur.getListeCapteur().entrySet();
         Iterator<Map.Entry<CapteurAbstrait, Integer>> it = setListeCapteur.iterator();
         while (it.hasNext()) {
             Map.Entry<CapteurAbstrait, Integer> e = it.next();
-            listeCapteurLié.add(e.getKey());
-            listeCapteurLiéCoeff.add(e.getValue());
+            listeCapteurLie.add(e.getKey());
+            listeCapteurLieCoeff.add(e.getValue());
         }
 
-        observablelListeCapteur = FXCollections.observableList(listeCapteurLié);
+        observablelListeCapteur = FXCollections.observableList(listeCapteurLie);
         ListView<CapteurAbstrait> listeVCapteur = new ListView<>(observablelListeCapteur);
 
         listeVCapteur.setCellFactory(new Callback<ListView<CapteurAbstrait>, ListCell<CapteurAbstrait>>() {
             @Override
             public ListCell<CapteurAbstrait> call(ListView<CapteurAbstrait> param) {
-                return new DigitalFormatCell(listeCapteurLié);
+                return new DigitalFormatCell(listeCapteurLie);
             }
         });
 
@@ -116,30 +109,30 @@ public class AffichageConfigCaptComp {
         buttonAjout.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                listeCapteurNonLié = new ArrayList<>();
+                List<CapteurAbstrait> listeCapteurNonLie = new ArrayList<>();
 
                 for(int i=0; i < listeTotalCapteur.size(); i++) {
                     if(!observablelListeCapteur.contains(listeTotalCapteur.get(i))){
                         if(!listeTotalCapteur.get(i).getNom().equals(capteur.getNom())) {
                             if(listeTotalCapteur.get(i) instanceof CapteurComplexe){
                                 if(!((CapteurComplexe) listeTotalCapteur.get(i)).getListeCapteur().containsKey(capteur)) {
-                                    listeCapteurNonLié.add(listeTotalCapteur.get(i));
+                                    listeCapteurNonLie.add(listeTotalCapteur.get(i));
                                 }
                             }
                             else {
-                                listeCapteurNonLié.add(listeTotalCapteur.get(i));
+                                listeCapteurNonLie.add(listeTotalCapteur.get(i));
                             }
                         }
                     }
                 }
 
-                oCapteur = FXCollections.observableList(listeCapteurNonLié);
+                oCapteur = FXCollections.observableList(listeCapteurNonLie);
                 ListView<CapteurAbstrait> listeViewCapteur = new ListView<>(oCapteur);
 
                 listeViewCapteur.setCellFactory(new Callback<ListView<CapteurAbstrait>, ListCell<CapteurAbstrait>>() {
                     @Override
                     public ListCell<CapteurAbstrait> call(ListView<CapteurAbstrait> param) {
-                        return new DigitalFormatCell(listeCapteurNonLié);
+                        return new DigitalFormatCell(listeCapteurNonLie);
                     }
                 });
 
@@ -175,10 +168,9 @@ public class AffichageConfigCaptComp {
     }
 
     private void changementCoeff(CapteurAbstrait c, ObservableList<CapteurAbstrait> oCapteur) {
-        Text coeffTxt = new Text("Coefficent : ");
-        Spinner<Integer> chgmtCoeffSpinner = new Spinner();
-        SpinnerValueFactory valCoeffSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,20,listeCapteurLiéCoeff.get(listeCapteurLié.indexOf(c)));
-        chgmtCoeffSpinner.setValueFactory(valCoeffSpinner);
+        coeffTxt.setText("Coefficent : ");
+        Spinner<Integer> chgmtCoeffSpinner = new Spinner<>();
+        chgmtCoeffSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,20,listeCapteurLieCoeff.get(listeCapteurLie.indexOf(c))));
         vb.getChildren().add(coeffTxt);
         vb.getChildren().add(chgmtCoeffSpinner);
         Button buttonModif = new Button("Modifier coeff " + c.getNom());

@@ -1,17 +1,13 @@
 package vue;
 
 import class_Metier.capteur.Capteur;
-import class_Metier.capteur.CapteurAbstrait;
-import class_Metier.capteur.CapteurComplexe;
 import class_Metier.generateur.GenerationAleatoireBorne;
 import class_Metier.generateur.GenerationAleatoireInfini;
 import class_Metier.generateur.GenerationAleatoireReelle;
 import class_Metier.generateur.GenerationValeurAbstrait;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -19,19 +15,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AffichageConfigCapt {
     @FXML
     private GridPane gridConfig;
 
-    private Capteur capteur;
+    public Capteur capteur;
     private Text nomCapteur = new Text();
     private VBox vb = new VBox();
     private VBox vbOptionGenerateur = new VBox();
 
-    private Text tps = new Text("Temps de changement (en seconde) : ");
+    private Text tps;
     private Text min = new Text();
     private Text max = new Text();
 
@@ -39,20 +32,19 @@ public class AffichageConfigCapt {
     private TextField maxTF = new TextField();
     private TextField nomCapteurTF = new TextField();
     private Spinner<Integer> tpsSpinner = new Spinner<>();
-    private SpinnerValueFactory<Integer> valSpinner;
     private ComboBox<String> comboGenerateur = new ComboBox<>();
 
     private Button validation = new Button("Valider");
 
     private int choix;
 
-    private AffichageConfigCapt(Capteur  c){
+    AffichageConfigCapt(Capteur  c){
         capteur=c;
-        valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, capteur.getTpsChangement());
     }
 
     @FXML
     private void initialize() {
+        tps = new Text("Temps de changement (en seconde) : ");
         nomCapteur.setText(capteur.getNom());
         Font font = new Font("Arial", 18);
         nomCapteur.setFont(font);
@@ -66,14 +58,16 @@ public class AffichageConfigCapt {
 
         comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
         comboGenerateur.getSelectionModel().selectFirst();
+
+
+        SpinnerValueFactory<Integer> valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20,capteur.getTpsChangement()/1000);
         tpsSpinner.setValueFactory(valSpinner);
 
         affichageCapteur();
 
         gridConfig.add(nomCapteur,0, 0);
         gridConfig.add(vb,0,1);
-        gridConfig.add(vbOptionGenerateur, 0, 1);
-        gridConfig.setHalignment(nomCapteur, HPos.CENTER);
+        gridConfig.add(vbOptionGenerateur, 0, 2);
     }
 
     private void affichageCapteur()
@@ -103,10 +97,10 @@ public class AffichageConfigCapt {
                 vbOptionGenerateur.getChildren().add(validation);
             }
         });
+        choix = 1;
         min.setText("Minimum : ");
         max.setText("Maximum : ");
         affichageGenerateur();
-        choix = 1;
     }
 
     private void affichageGenerateur()
@@ -158,5 +152,9 @@ public class AffichageConfigCapt {
         else {
             g = new GenerationAleatoireInfini();
         }
+        capteur.setG(g);
+        capteur.setTpsChangement(tpsSpinner.getValue()*1000);
+        Stage stage = (Stage) validation.getScene().getWindow();
+        stage.close();
     }
 }
