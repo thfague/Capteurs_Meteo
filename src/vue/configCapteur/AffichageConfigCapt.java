@@ -1,10 +1,12 @@
-package vue;
+package vue.configCapteur;
 
 import class_Metier.capteur.Capteur;
+import class_Metier.capteur.CapteurAbstrait;
 import class_Metier.generateur.GenerationAleatoireBorne;
 import class_Metier.generateur.GenerationAleatoireInfini;
 import class_Metier.generateur.GenerationAleatoireReelle;
 import class_Metier.generateur.GenerationValeurAbstrait;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +16,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class AffichageConfigCapt {
     @FXML
@@ -33,21 +37,37 @@ public class AffichageConfigCapt {
     private TextField nomCapteurTF = new TextField();
     private Spinner<Integer> tpsSpinner = new Spinner<>();
     private ComboBox<String> comboGenerateur = new ComboBox<>();
+    private ObservableList<CapteurAbstrait> listeTotalCapteur;
 
     private Button validation = new Button("Valider");
 
     private int choix;
 
-    AffichageConfigCapt(Capteur  c){
+    public AffichageConfigCapt(Capteur  c, ObservableList<CapteurAbstrait> l){
         capteur=c;
+        listeTotalCapteur = l;
     }
 
     @FXML
     private void initialize() {
-        tps = new Text("Temps de changement (en seconde) : ");
-        nomCapteur.setText(capteur.getNom());
+        if(capteur.getNom().equals("")) {
+            nomCapteur.setText("Nom du capteur :");
+            nomCapteurTF.setText("");
+        }
+        else {
+            nomCapteur.setText(capteur.getNom());
+            nomCapteurTF.setText(capteur.getNom());
+        }
+
         Font font = new Font("Arial", 18);
         nomCapteur.setFont(font);
+
+        tps = new Text("Temps de changement (en seconde) : ");
+        SpinnerValueFactory<Integer> valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20,capteur.getTpsChangement()/1000);
+        tpsSpinner.setValueFactory(valSpinner);
+
+        comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
+        comboGenerateur.getSelectionModel().selectFirst();
 
         validation.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
@@ -56,18 +76,10 @@ public class AffichageConfigCapt {
             }
         });
 
-        comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
-        comboGenerateur.getSelectionModel().selectFirst();
-
-
-        SpinnerValueFactory<Integer> valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20,capteur.getTpsChangement()/1000);
-        tpsSpinner.setValueFactory(valSpinner);
-
         affichageCapteur();
 
-        gridConfig.add(nomCapteur,0, 0);
-        gridConfig.add(vb,0,1);
-        gridConfig.add(vbOptionGenerateur, 0, 2);
+        gridConfig.add(vb,0,0);
+        gridConfig.add(vbOptionGenerateur, 0, 1);
     }
 
     private void affichageCapteur()
@@ -75,6 +87,8 @@ public class AffichageConfigCapt {
         vb.getChildren().clear();
         vbOptionGenerateur.getChildren().clear();
 
+        vb.getChildren().add(nomCapteur);
+        vb.getChildren().add(nomCapteurTF);
         vb.getChildren().add(tps);
         vb.getChildren().add(tpsSpinner);
         vb.getChildren().add(comboGenerateur);
@@ -117,32 +131,20 @@ public class AffichageConfigCapt {
         GenerationValeurAbstrait g;
         if(choix == 1) {
             if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
-                affichageCapteur();
-                nomCapteurTF.setText("");
-                minTF.setText("");
-                maxTF.setText("");
-                vbOptionGenerateur.getChildren().add(new Text("Les valeurs minimum et maximum doivent être renseignées"));
+                reinit("Les valeurs minimum et maximum doivent être renseignées");
                 return;
             }
             int valMin = Integer.parseInt(minTF.getText());
             int valMax = Integer.parseInt(maxTF.getText());
             if(valMin >= valMax) {
-                affichageCapteur();
-                nomCapteurTF.setText("");
-                minTF.setText("");
-                maxTF.setText("");
-                vbOptionGenerateur.getChildren().add(new Text("La valeur minimum doit être inférieur à la valeur maximum"));
+                reinit("La valeur minimum doit être inférieur à la valeur maximum");
                 return;
             }
             g = new GenerationAleatoireBorne(valMin, valMax);
         }
         else if(choix == 2) {
             if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
-                affichageCapteur();
-                nomCapteurTF.setText("");
-                minTF.setText("");
-                maxTF.setText("");
-                vbOptionGenerateur.getChildren().add(new Text("Certaines valeurs ne sont pas renseignées"));
+                reinit("La valeur de départ et la valeur de différence doivent être renseignées");
                 return;
             }
             int valMin = Integer.parseInt(minTF.getText());
@@ -152,9 +154,32 @@ public class AffichageConfigCapt {
         else {
             g = new GenerationAleatoireInfini();
         }
-        capteur.setG(g);
-        capteur.setTpsChangement(tpsSpinner.getValue()*1000);
+        if(!listeTotalCapteur.contains(capteur)) {
+            listeTotalCapteur.add(new Capteur(0, nomCapteurTF.getText(),tpsSpinner.getValue()*1000, g));
+        }
+        else {
+            listeTotalCapteur.remove(capteur);
+            capteur.setG(g);
+            capteur.setTpsChangement(tpsSpinner.getValue()*1000);
+            capteur.setNom(nomCapteurTF.getText());
+            listeTotalCapteur.add(capteur);
+        }
         Stage stage = (Stage) validation.getScene().getWindow();
         stage.close();
+    }
+
+    private void reinit(String messageErreur) {
+        affichageCapteur();
+        if(capteur.getNom().equals("")) {
+            nomCapteur.setText("Nom du capteur :");
+            nomCapteur.setText("");
+        }
+        else {
+            nomCapteur.setText(capteur.getNom());
+        }
+        nomCapteurTF.setText(capteur.getNom());
+        minTF.setText("");
+        maxTF.setText("");
+        vbOptionGenerateur.getChildren().add(new Text(messageErreur));
     }
 }

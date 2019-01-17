@@ -1,4 +1,4 @@
-package vue;
+package vue.configCapteur;
 
 import class_Metier.capteur.CapteurAbstrait;
 import class_Metier.capteur.CapteurComplexe;
@@ -18,6 +18,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import vue.DigitalFormatCell;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -34,8 +36,13 @@ public class AffichageConfigCaptComp {
     private ObservableList<CapteurAbstrait> oCapteur;
     private Text coeffTxt;
     private Spinner<Integer> coeffSpinner;
+    private Text nomCapteur = new Text();
+    private TextField nomCapteurTF = new TextField();
+    private Button validation;
+    private Map<CapteurAbstrait,Integer> m = new HashMap<>();
+    private CapteurAbstrait captComp = new CapteurComplexe(m,"");
 
-    AffichageConfigCaptComp(CapteurComplexe  c, List<CapteurAbstrait> l){
+    public AffichageConfigCaptComp(CapteurComplexe  c, List<CapteurAbstrait> l){
         capteur=c;
         listeTotalCapteur = l;
     }
@@ -52,6 +59,22 @@ public class AffichageConfigCaptComp {
 
         boutonAjouterC();
         chargementCapteurLie();
+
+        validation = new Button("Valider");
+        validation.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                validationCapteurComplexe();
+            }
+        });
+
+        affichageCapteurComplexe();
+        //gridAjoutCapteur.add(vb, 0, 0);
+
+
+
+
+
 
         gridConfig.add(nomCapteur,0, 0);
         gridConfig.add(vb, 1, 1);
@@ -195,7 +218,7 @@ public class AffichageConfigCaptComp {
             public void handle (ActionEvent actionEvent){
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("ajoutCapteur.fxml"));
-                    loader.setController(new AjoutCapteur(oCapteur));
+                    //loader.setController(new AjoutCapteur(oCapteur));
                     Parent root = loader.load();
                     Stage stage = new Stage();
                     stage.initOwner(gridConfig.getScene().getWindow());
@@ -210,5 +233,34 @@ public class AffichageConfigCaptComp {
                 }
             }
         });
+    }
+
+    private void affichageCapteurComplexe()
+    {
+        vb.getChildren().clear();
+
+        nomCapteur.setText("Nom du capteur complexe : ");
+        vb.getChildren().add(nomCapteur);
+        vb.getChildren().add(nomCapteurTF);
+
+        Text titre = new Text("Configurer la liste de capteur");
+        vb.getChildren().add(titre);
+
+        vb.getChildren().add(validation);
+    }
+
+    private void validationCapteurComplexe() {
+        for(int i = 0; i < listeTotalCapteur.size(); i++) {
+            if(nomCapteurTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
+                affichageCapteurComplexe();
+                nomCapteurTF.setText("");
+                vb.getChildren().add(new Text("Nom de capteur déjà pris"));
+                return;
+            }
+        }
+        captComp.setNom(nomCapteurTF.getText());
+        listeTotalCapteur.add(captComp);
+        Stage stage = (Stage) validation.getScene().getWindow();
+        stage.close();
     }
 }

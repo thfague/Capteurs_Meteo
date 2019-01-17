@@ -8,6 +8,8 @@ import class_Metier.generateur.GenerationAleatoireInfini;
 import class_Metier.generateur.GenerationAleatoireReelle;
 import class_Metier.generateur.GenerationValeurAbstrait;
 import javafx.scene.control.ComboBox;
+import vue.configCapteur.AffichageConfigCapt;
+import vue.configCapteur.AffichageConfigCaptComp;
 import vue.affichageCapteur.AffichageDigital;
 import vue.affichageCapteur.AffichageImgMeteo;
 import vue.affichageCapteur.AffichageThermo;
@@ -39,13 +41,26 @@ public class ControllerAccueil {
 
     private Text textCapteur = new Text();
     private List<CapteurAbstrait> listeCapteur = new ArrayList<>();
-    private VBox vb = new VBox();
+    private VBox vbDroite = new VBox();
+    private VBox vbGauche = new VBox();
     private ObservableList<CapteurAbstrait> olCapteur;
     private ComboBox comboCapteur = new ComboBox();
 
     @FXML
     public void initialize (){
         creationCapteur();
+
+        comboCapteur.getItems().addAll("capteur","capteurComplexe");
+        comboCapteur.getSelectionModel().selectFirst();
+        comboCapteur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
+            if (nV.equals("capteur")) {
+                boutonAjouterCapteur(new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)), "Ajouter un capteur");
+            }
+            if (nV.equals("capteurComplexe")) {
+                boutonAjouterCapteur(new CapteurComplexe(new HashMap<>(), ""), "Ajouter un capteur complexe");
+            }
+        });
+        boutonAjouterCapteur(new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)), "Ajouter un capteur");
 
         olCapteur = FXCollections.observableList(listeCapteur);
         ListView<CapteurAbstrait> listeVCapteur = new ListView<>(olCapteur);
@@ -59,41 +74,36 @@ public class ControllerAccueil {
 
         listeVCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
             textCapteur.setText(nV.getNom());
-            vb.getChildren().clear();
+            vbDroite.getChildren().clear();
 
             affichageBouton(nV, "Affichage digital", "affichageCapteur/affichageDigital.fxml", "Affichage format digital");
             affichageBouton(nV, "Affichage par thermomètre", "affichageCapteur/affichageThermo.fxml", "Affichage format thermomètre");
             affichageBouton(nV, "Affichage imagé", "affichageCapteur/affichageImgMeteo.fxml", "Affichage format image");
-            affichageBouton(nV, "Configuration", "affichageConfig.fxml", "Configuration capteur");
+            affichageBouton(nV, "Configuration", "configCapteur/affichageConfig.fxml", "Configuration");
             affichageBoutonSupprimer(nV, olCapteur);
         });
 
-        comboCapteur.getItems().add("capteur");
-        comboCapteur.getItems().add("capteurComplexe");
-        comboCapteur.getSelectionModel().selectFirst();
-        Button ajoutCapteur = new Button("Ajouter un capteur");
-        vb.getChildren().add(ajoutCapteur);
+        gridAccueil.add(comboCapteur, 0, 0);
+        gridAccueil.add(vbGauche, 0, 1);
+        gridAccueil.add(listeVCapteur, 0, 2);
+        gridAccueil.add(textCapteur, 1, 0);
+        gridAccueil.add(vbDroite, 1, 2);
+
+        vbDroite.setAlignment(Pos.TOP_CENTER);
+        Font font = new Font("Arial",18);
+        textCapteur.setFont(font);
+    }
+
+    private void boutonAjouterCapteur(CapteurAbstrait c, String titre) {
+        Button ajoutCapteur = new Button(titre);
+        vbGauche.getChildren().clear();
+        vbGauche.getChildren().add(ajoutCapteur);
         ajoutCapteur.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(comboCapteur.getSelectionModel().equals("capteur")) {
-                    newWindow("affichageConfig.fxml", "Configuration", new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)));
-                }
-                if(comboCapteur.getSelectionModel().equals("capteurComplexe")) {
-                    newWindow("affichageConfig.fxml", "Configuration", new CapteurComplexe(new HashMap<>(), ""));
-                }
+                newWindow("configCapteur/affichageConfig.fxml", "Configuration", c);
             }
         });
-
-        gridAccueil.add(listeVCapteur, 0, 2);
-        gridAccueil.add(comboCapteur,0,0);
-        gridAccueil.add(ajoutCapteur,0,1);
-        gridAccueil.add(textCapteur, 1, 0);
-        gridAccueil.add(vb, 1, 2);
-
-        vb.setAlignment(Pos.TOP_CENTER);
-        Font font = new Font("Arial",18);
-        textCapteur.setFont(font);
     }
 
     private void creationCapteur() {
@@ -114,7 +124,7 @@ public class ControllerAccueil {
     //Création et ajout d'un bouton pour un type d'affichage
     private void affichageBouton(CapteurAbstrait capteur, String nomButton, String nomFichier, String titreFichier) {
         Button b = new Button(nomButton);
-        vb.getChildren().add(b);
+        vbDroite.getChildren().add(b);
         b.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -125,7 +135,7 @@ public class ControllerAccueil {
 
     private void affichageBoutonSupprimer(CapteurAbstrait capteur, ObservableList<CapteurAbstrait> listeCapteur) {
         Button button = new Button("Supprimer");
-        vb.getChildren().add(button);
+        vbDroite.getChildren().add(button);
         button.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -139,7 +149,7 @@ public class ControllerAccueil {
                 }
                 if(listeCapteur.size() == 0) {
                     textCapteur.setText("");
-                    vb.getChildren().clear();
+                    vbDroite.getChildren().clear();
                 }
             }
         });
@@ -153,9 +163,9 @@ public class ControllerAccueil {
                 case "affichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(capteur)); break;
                 case "affichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(capteur)); break;
                 case "affichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(capteur)); break;
-                case "affichageConfig.fxml":
+                case "configCapteur/affichageConfig.fxml":
                     if(capteur instanceof CapteurComplexe) { loader.setController(new AffichageConfigCaptComp((CapteurComplexe) capteur, olCapteur)); }
-                    else { loader.setController(new AffichageConfigCapt((Capteur) capteur)); }
+                    else { loader.setController(new AffichageConfigCapt((Capteur) capteur, olCapteur)); }
                     break;
             }
             Parent root = loader.load();

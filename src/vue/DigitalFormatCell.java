@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DigitalFormatCell extends ListCell<CapteurAbstrait> {
 
-    DigitalFormatCell(List<CapteurAbstrait> listeC) {
+    public DigitalFormatCell(List<CapteurAbstrait> listeC) {
         List<CapteurAbstrait> listeCapteur = new ArrayList<>();
         listeCapteur = listeC;
     }
