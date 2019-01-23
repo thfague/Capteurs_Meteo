@@ -10,6 +10,7 @@ public class AffichageThermo {
     @FXML
     private Slider thermoSlider;
 
+    //Méthode appelée avant initialise()
     public AffichageThermo(CapteurAbstrait c) { capteur=c; }
 
     @FXML

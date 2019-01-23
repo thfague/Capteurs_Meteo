@@ -47,11 +47,13 @@ public class AffichageConfigCaptComp {
     private Text nomCapteur = new Text();
     private TextField nomCapteurTF = new TextField();
     private Button validation;
+    private Button ajoutCapteur;
     private Map<CapteurAbstrait,Integer> m = new HashMap<>();
     private CapteurAbstrait captComp = new CapteurComplexe(m,"");
-    private ComboBox comboCapteur = new ComboBox();
+    private ComboBox<String> comboCapteur = new ComboBox<>();
     private Integer choixTypeCapteur;
 
+    //Méthode appelée avant initialise()
     public AffichageConfigCaptComp(CapteurComplexe  c, List<CapteurAbstrait> l){
         capteur=c;
         listeTotalCapteur = l;
@@ -64,11 +66,8 @@ public class AffichageConfigCaptComp {
         coeffSpinner.valueFactoryProperty().setValue(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
 
         validation = new Button("Valider la configuration");
-        validation.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                validationCapteurComplexe();
-            }
+        validation.setOnAction((event) -> {
+            validationCapteurComplexe();
         });
 
         reinitScene("");
@@ -93,19 +92,18 @@ public class AffichageConfigCaptComp {
         });
         choixTypeCapteur = 0;
 
-        Button ajoutCapteur = new Button("Ajouter un capteur");
-        vbDroite.getChildren().add(ajoutCapteur);
+        ajoutCapteur = new Button("Ajouter un capteur");
         ajoutCapteur.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("configCapteur/affichageConfig.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("affichageConfig.fxml"));
                     switch (choixTypeCapteur) {
                         case 0:
-                            loader.setController(new AffichageConfigCapt(new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)), observablelListeCapteur));
+                            loader.setController(new AffichageConfigCapt(new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)), oCapteur));
                             break;
                         case 1:
-                            loader.setController(new AffichageConfigCaptComp(new CapteurComplexe(new HashMap<>(), ""), observablelListeCapteur));
+                            loader.setController(new AffichageConfigCaptComp(new CapteurComplexe(new HashMap<>(), ""), oCapteur));
                             break;
                     }
                     Parent root = loader.load();
@@ -117,37 +115,6 @@ public class AffichageConfigCaptComp {
                     stage.show();
                 }
                 catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-
-
-    private void ajouterCapteurInexistant(CapteurAbstrait c) {
-        Button ajoutCInex = new Button("Ajouter un nouveau capteur");
-        vbDroite.getChildren().add(ajoutCInex);
-        ajoutCInex.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle (ActionEvent actionEvent){
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("configCapteur/affichageConfig.fxml"));
-                    if(c instanceof CapteurComplexe) {
-                        loader.setController(new AffichageConfigCaptComp((CapteurComplexe) c, observablelListeCapteur));
-                    }
-                    else {
-                        loader.setController(new AffichageConfigCapt((Capteur) c, observablelListeCapteur));
-                    }
-                    Parent root = loader.load();
-                    Stage stage = new Stage();
-                    stage.initOwner(gridConfig.getScene().getWindow());
-                    stage.setTitle(ajoutCInex.getText());
-                    stage.setScene(new Scene(root, 500, 400));
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.show();
-                }
-                catch(IOException e){
                     e.printStackTrace();
                 }
             }
@@ -191,16 +158,16 @@ public class AffichageConfigCaptComp {
                 listeViewCapteur.getSelectionModel().selectedItemProperty().addListener((listeCNonApproprie, oV, nV) -> {
                     vbDroite.getChildren().clear();
                     vbDroite.getChildren().add(comboCapteur);
-                    ajouterCapteurInexistant(new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)));
+                    vbDroite.getChildren().add(ajoutCapteur);
                     vbDroite.getChildren().add(listeViewCapteur);
                     vbDroite.getChildren().add(coeffTxt);
                     vbDroite.getChildren().add(coeffSpinner);
-                    ajoutCapteur(nV, oCapteur);
+                    ajouterLeCapteur(nV, oCapteur);
                 });
 
                 vbDroite.getChildren().clear();
                 vbDroite.getChildren().add(comboCapteur);
-                ajouterCapteurInexistant(new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)));
+                vbDroite.getChildren().add(ajoutCapteur);
                 vbDroite.getChildren().add(listeViewCapteur);
             }
         });
@@ -232,8 +199,10 @@ public class AffichageConfigCaptComp {
         listeVCapteur.getSelectionModel().selectedItemProperty().addListener((listeCapteur, oV, nV) -> {
             vbDroite.getChildren().clear();
             boutonAjouterCAuCC();
-            changementCoeff(nV, observablelListeCapteur);
-            boutonSupprimerC(nV, observablelListeCapteur);
+            if(listeCapteurLie.size() > 0) {
+                changementCoeff(nV, observablelListeCapteur);
+                boutonSupprimerC(nV, observablelListeCapteur);
+            }
         });
 
         vbGauche.getChildren().add(listeVCapteur);
@@ -247,6 +216,10 @@ public class AffichageConfigCaptComp {
         buttonSupp.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                if(olCapteur.size() == 1){
+                    olCapteur.clear();
+
+                }
                 olCapteur.remove(c);
                 capteur.getListeCapteur().remove(c);
             }
@@ -255,7 +228,7 @@ public class AffichageConfigCaptComp {
 
 
     //Affiche et ajoute un capteur existant non lié au capteur complexe
-    private void ajoutCapteur(CapteurAbstrait c, ObservableList<CapteurAbstrait> oCapteur) {
+    private void ajouterLeCapteur(CapteurAbstrait c, ObservableList<CapteurAbstrait> oCapteur) {
         Button buttonAjout = new Button("Ajouter " + c.getNom());
         vbDroite.getChildren().add(buttonAjout);
         buttonAjout.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
@@ -307,7 +280,19 @@ public class AffichageConfigCaptComp {
         if(listeTotalCapteur.contains(capteur)) {
             listeTotalCapteur.remove(capteur);
         }
-        listeTotalCapteur.add(new CapteurComplexe(m, nomCapteurTF.getText()));
+        CapteurComplexe ca = new CapteurComplexe(m, nomCapteurTF.getText());
+        listeTotalCapteur.add(ca);
+        for(CapteurAbstrait c : listeTotalCapteur) {
+            if(c instanceof CapteurComplexe){
+                if(((CapteurComplexe) c).getListeCapteur().containsKey(capteur)){
+                    ((CapteurComplexe) c).getListeCapteur().remove(capteur);
+                    ((CapteurComplexe) c).ajoutCapteur(ca, 1);
+                }
+            }
+        }
+
+
+
         Stage stage = (Stage) validation.getScene().getWindow();
         stage.close();
     }
@@ -323,8 +308,7 @@ public class AffichageConfigCaptComp {
             nomCapteur.setText(capteur.getNom());
             nomCapteurTF.setText(capteur.getNom());
         }
-        Font font = new Font("Arial", 18);
-        nomCapteur.setFont(font);
+        nomCapteur.setFont(new Font("Arial", 18));
         chargementCapteurLie();
         boutonAjouterCAuCC();
         vbGauche.getChildren().add(new Text(messageErreur));

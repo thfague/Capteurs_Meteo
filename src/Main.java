@@ -10,7 +10,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("vue/accueil.fxml"));
         primaryStage.setTitle("Meteo");
-        primaryStage.setScene(new Scene(root, 600, 350));
+        Scene s = new Scene(root, 410, 350);
+        s.getStylesheets().add("/Style");
+        primaryStage.setScene(s);
         primaryStage.show();
     }
 

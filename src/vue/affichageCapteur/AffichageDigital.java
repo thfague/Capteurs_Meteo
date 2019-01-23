@@ -9,7 +9,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.converter.NumberStringConverter;
 
-
 public class AffichageDigital {
     @FXML
     private Text nomCapteur;
@@ -17,6 +16,7 @@ public class AffichageDigital {
     private TextField valeurCapteur;
     private CapteurAbstrait capteur;
 
+    //Méthode appelée avant initialise()
     public AffichageDigital(CapteurAbstrait  c){
         capteur=c;
     }
@@ -24,8 +24,7 @@ public class AffichageDigital {
     @FXML
     private void initialize(){
         nomCapteur.textProperty().bind(capteur.nomProperty());
-        Font font = new Font("Arial", 18);
-        nomCapteur.setFont(font);
+        nomCapteur.setFont(new Font("Arial", 18));
         if (capteur instanceof Capteur) {
             valeurCapteur.textProperty().bindBidirectional(capteur.valeurProperty(), new NumberStringConverter());
         }

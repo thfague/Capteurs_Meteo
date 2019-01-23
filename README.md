@@ -28,13 +28,3 @@ Semaine 3:
 **    où les ai sont les pondérations de chaque capteur
 **On veut visualiser ces capteurs sous forme hiérarchique et pouvoir continuer à les configurer comme avant.
 **Pour les capteurs complexes cela voudra dire pouvoir ajouter un s/s capteur et pouvoir changer son coefficient à associer
-
-A FAIRE :
-    un capteur peut modifier son nom
-    ajouter un capteur utilise AffichageConfigCapt
-
-POSSIBLE AMELIORATION :
-    * Verification : ne pas pour mettre de string dans minimun et max dans ajouter un capteur
-    * Stylisé l'application
-    * tous capteur peut modifié son nom
-    *** on peut ajouter un capteur inexistant à un capteur complexe --> FAIT MAIS PB : liste vide ajout capteur complexe dans ajout capteur inexistant

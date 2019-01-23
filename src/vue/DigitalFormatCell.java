@@ -12,6 +12,7 @@ public class DigitalFormatCell extends ListCell<CapteurAbstrait> {
         listeCapteur = listeC;
     }
 
+    //Méthode qui permet de changer le type de données affichées danz la ListView
     @Override
     public void updateItem(CapteurAbstrait capteur, boolean vide) {
         super.updateItem(capteur, vide);

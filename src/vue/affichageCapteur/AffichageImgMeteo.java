@@ -16,6 +16,7 @@ public class AffichageImgMeteo {
     private ImageView idImg;
     private CapteurAbstrait capteur;
 
+    //Méthode appelée avant initialise()
     public AffichageImgMeteo(CapteurAbstrait c){
         capteur=c;
     }
@@ -23,8 +24,8 @@ public class AffichageImgMeteo {
     @FXML
     private void initialize(){
         nomCapteur.textProperty().bind(capteur.nomProperty());
-        Font font = new Font("Arial",18);
-        nomCapteur.setFont(font);
+        nomCapteur.setFont(new Font("Arial", 18));
+
 
         Image img1 = new Image("/cielbleu.jpeg");
         Image img2 = new Image("/cielneige.jpg");
@@ -38,6 +39,8 @@ public class AffichageImgMeteo {
         calculValeur(val, img2, img1, img3);
     }
 
+    //Méthode qui choisit l'image selon la valeur du capteur
+    //Méthode appelée dès que la valeur du capteur change
     private void calculValeur(FloatProperty val, Image img2, Image img1, Image img3){
         if (val.get() < 0) {
             idImg.setImage(img2);

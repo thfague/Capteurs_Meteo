@@ -43,14 +43,16 @@ public class AffichageAccueil {
     private GridPane gridAccueil;
 
     private Text textCapteur = new Text();
+    private Text typeCapteur = new Text();
     private List<CapteurAbstrait> listeCapteur = new ArrayList<>();
     private VBox vbDroite = new VBox();
     private ObservableList<CapteurAbstrait> olCapteur;
-    private ComboBox comboCapteur = new ComboBox();
+    private ComboBox<String> comboCapteur = new ComboBox<>();
     private Integer choixTypeCapteur;
 
     @FXML
     public void initialize (){
+
         creationCapteur();
         creationComboCapteur();
         creationListViewCapteur();
@@ -60,9 +62,9 @@ public class AffichageAccueil {
         gridAccueil.add(vbDroite, 1, 2);
 
         //Un peu de style
+        gridAccueil.getStyleClass().add("grid");
         vbDroite.setAlignment(Pos.TOP_CENTER);
-        Font font = new Font("Arial",18);
-        textCapteur.setFont(font);
+        textCapteur.setFont(new Font("Arial",18));
     }
 
     private void creationComboCapteur() {
@@ -93,6 +95,7 @@ public class AffichageAccueil {
                 }
             }
         });
+        comboCapteur.getStyleClass().add("button");
     }
 
     private void creationListViewCapteur() {
@@ -107,13 +110,22 @@ public class AffichageAccueil {
         });
 
         listeVCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
-            textCapteur.setText(nV.getNom());
             vbDroite.getChildren().clear();
-            boutonAffichage(nV, "Affichage digital", "affichageCapteur/affichageDigital.fxml", "Affichage format digital");
-            boutonAffichage(nV, "Affichage par thermomètre", "affichageCapteur/affichageThermo.fxml", "Affichage format thermomètre");
-            boutonAffichage(nV, "Affichage imagé", "affichageCapteur/affichageImgMeteo.fxml", "Affichage format image");
-            boutonAffichage(nV, "Configuration", "configCapteur/affichageConfig.fxml", "Configuration");
-            affichageBoutonSupprimer(nV, olCapteur);
+            vbDroite.getChildren().add(typeCapteur);
+            if(nV instanceof Capteur) {
+                typeCapteur.setText("Type : Capteur");
+            }
+            if(nV instanceof CapteurComplexe) {
+                typeCapteur.setText("Type : CapteurComplexe");
+            }
+            if(olCapteur.size() > 0) {
+                textCapteur.setText(nV.getNom());
+                boutonAffichage(nV, "Affichage digital", "affichageCapteur/affichageDigital.fxml", "Affichage format digital");
+                boutonAffichage(nV, "Affichage par thermomètre", "affichageCapteur/affichageThermo.fxml", "Affichage format thermomètre");
+                boutonAffichage(nV, "Affichage imagé", "affichageCapteur/affichageImgMeteo.fxml", "Affichage format image");
+                boutonAffichage(nV, "Configuration", "configCapteur/affichageConfig.fxml", "Configuration");
+                affichageBoutonSupprimer(nV, olCapteur);
+            }
         });
         gridAccueil.add(listeVCapteur, 0, 2);
     }
@@ -137,11 +149,8 @@ public class AffichageAccueil {
     private void boutonAffichage(CapteurAbstrait capteur, String nomButton, String nomFichier, String titreFichier) {
         Button b = new Button(nomButton);
         vbDroite.getChildren().add(b);
-        b.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                newWindow(nomFichier, titreFichier, capteur);
-            }
+        b.setOnAction((event) -> {
+            newWindow(nomFichier, titreFichier, capteur);
         });
     }
 
@@ -166,7 +175,7 @@ public class AffichageAccueil {
             }
         });
     }
-
+    
     private void newWindow(String nomFichier, String titre, CapteurAbstrait capteur)
     {
         try {

@@ -2,6 +2,7 @@ package vue.configCapteur;
 
 import class_Metier.capteur.Capteur;
 import class_Metier.capteur.CapteurAbstrait;
+import class_Metier.capteur.CapteurComplexe;
 import class_Metier.generateur.GenerationAleatoireBorne;
 import class_Metier.generateur.GenerationAleatoireInfini;
 import class_Metier.generateur.GenerationAleatoireReelle;
@@ -26,7 +27,7 @@ public class AffichageConfigCapt {
     private GridPane gridConfig;
 
     public Capteur capteur;
-    private Text nomCapteur = new Text();
+    private Text nomCapt = new Text();
     private VBox vb = new VBox();
     private VBox vbOptionGenerateur = new VBox();
     private Text tps;
@@ -34,13 +35,14 @@ public class AffichageConfigCapt {
     private Text max = new Text();
     private TextField minTF = new TextField();
     private TextField maxTF = new TextField();
-    private TextField nomCapteurTF = new TextField();
+    private TextField nomCaptTF = new TextField();
     private Spinner<Integer> tpsSpinner = new Spinner<>();
     private ComboBox<String> comboGenerateur = new ComboBox<>();
     private ObservableList<CapteurAbstrait> listeTotalCapteur;
     private Button validation = new Button("Valider la configuration");
     private Integer choixGenerateur;
 
+    //Méthode appelée avant initialise()
     public AffichageConfigCapt(Capteur  c, ObservableList<CapteurAbstrait> l){
         capteur=c;
         listeTotalCapteur = l;
@@ -55,11 +57,11 @@ public class AffichageConfigCapt {
         comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
         comboGenerateur.getSelectionModel().selectFirst();
 
-        validation.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                validationCapteur();
-            }
+        addNumericValidation(minTF);
+        addNumericValidation(maxTF);
+
+        validation.setOnAction((event) -> {
+            validationCapteur();
         });
 
         reinit("");
@@ -68,13 +70,33 @@ public class AffichageConfigCapt {
         gridConfig.add(vbOptionGenerateur, 0, 1);
     }
 
+    //Méthode qui empêche d'écrire autre chose que des chiffres dans un textfield
+    private static void addNumericValidation(TextField field) {
+        field.getProperties().put("vkType", "numeric");
+        field.setTextFormatter(new TextFormatter<>(c -> {
+            if (c.isContentChange()) {
+                if (c.getControlNewText().length() == 0) {
+                    return c;
+                }
+                try {
+                    Integer.parseInt(c.getControlNewText());
+                    return c;
+                } catch (NumberFormatException e) {
+                }
+                return null;
+
+            }
+            return c;
+        }));
+    }
+
     private void affichageCapteur()
     {
         vb.getChildren().clear();
         vbOptionGenerateur.getChildren().clear();
 
-        vb.getChildren().add(nomCapteur);
-        vb.getChildren().add(nomCapteurTF);
+        vb.getChildren().add(nomCapt);
+        vb.getChildren().add(nomCaptTF);
         vb.getChildren().add(tps);
         vb.getChildren().add(tpsSpinner);
         vb.getChildren().add(comboGenerateur);
@@ -115,14 +137,14 @@ public class AffichageConfigCapt {
 
     private void validationCapteur() {
         for(int i = 0; i < listeTotalCapteur.size(); i++) {
-            if(nomCapteurTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
-                if(!nomCapteurTF.getText().equals(capteur.getNom())) {
+            if(nomCaptTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
+                if(!nomCaptTF.getText().equals(capteur.getNom())) {
                     reinit("Nom de capteur déjà pris");
                     return;
                 }
             }
         }
-        if(nomCapteurTF.getText().equals("")) {
+        if(nomCaptTF.getText().equals("")) {
             reinit("Un capteur doit avoir un nom");
             return;
         }
@@ -154,8 +176,18 @@ public class AffichageConfigCapt {
         }
         if(listeTotalCapteur.contains(capteur)) {
             listeTotalCapteur.remove(capteur);
+
         }
-        listeTotalCapteur.add(new Capteur(0, nomCapteurTF.getText(),tpsSpinner.getValue()*1000, g));
+        Capteur ca = new Capteur(0, nomCaptTF.getText(),tpsSpinner.getValue()*1000, g);
+        listeTotalCapteur.add(ca);
+        for(CapteurAbstrait c : listeTotalCapteur) {
+            if(c instanceof CapteurComplexe){
+                if(((CapteurComplexe) c).getListeCapteur().containsKey(capteur)){
+                    ((CapteurComplexe) c).getListeCapteur().remove(capteur);
+                    ((CapteurComplexe) c).ajoutCapteur(ca, 1);
+                }
+            }
+        }
 
         Stage stage = (Stage) validation.getScene().getWindow();
         stage.close();
@@ -163,15 +195,14 @@ public class AffichageConfigCapt {
 
     private void reinit(String messageErreur) {
         if(capteur.getNom().equals("")) {
-            nomCapteur.setText("Nom du capteur :");
-            nomCapteurTF.setText("");
+            nomCapt.setText("Nom du capteur :");
+            nomCaptTF.setText("");
         }
         else {
-            nomCapteur.setText(capteur.getNom());
-            nomCapteurTF.setText(capteur.getNom());
+            nomCapt.setText(capteur.getNom());
+            nomCaptTF.setText(capteur.getNom());
         }
-        Font font = new Font("Arial", 18);
-        nomCapteur.setFont(font);
+        nomCapt.setFont(new Font("Arial", 18));
         affichageCapteur();
         comboGenerateur.getSelectionModel().selectFirst();
         minTF.setText("");

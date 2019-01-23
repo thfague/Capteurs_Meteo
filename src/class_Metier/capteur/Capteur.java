@@ -21,6 +21,7 @@ public class Capteur extends CapteurAbstrait implements Runnable {
     public void setTpsChangement(Integer i) { tpsChangement = i; }
     public Integer getTpsChangement() { return tpsChangement; }
 
+    //Méthode qui génère la nouvelle valeur du capteur selon sa générationValeur toutes les X secondes
     public void run() {
         try {
             while(true) {
