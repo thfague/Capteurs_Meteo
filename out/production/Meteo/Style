@@ -1,0 +1,7 @@
+.grid {
+    -fx-background-color:dodgerblue;
+}
+
+.button {
+    -fx-background-color:lightgrey;
+}

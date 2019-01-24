@@ -34,7 +34,7 @@ public class AffichageConfigCaptComp {
     @FXML
     private GridPane gridConfig;
 
-    public CapteurComplexe capteur;
+    private CapteurComplexe capteur;
     private List<CapteurAbstrait> listeTotalCapteur;
     private VBox vbGauche = new VBox();
     private VBox vbDroite = new VBox();

@@ -1,0 +1,6 @@
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane fx:id="gridAccueil" fx:controller="vue.AffichageAccueil"
+          xmlns:fx="http://javafx.com/fxml">
+
+</GridPane>

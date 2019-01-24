@@ -51,7 +51,7 @@ public class AffichageAccueil {
     private Integer choixTypeCapteur;
 
     @FXML
-    public void initialize (){
+    private void initialize (){
 
         creationCapteur();
         creationComboCapteur();
