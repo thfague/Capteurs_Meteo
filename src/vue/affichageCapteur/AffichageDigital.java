@@ -17,16 +17,17 @@ public class AffichageDigital {
     private CapteurAbstrait capteur;
 
     //Méthode appelée avant initialise()
-    public AffichageDigital(CapteurAbstrait  c){
-        capteur=c;
+    public AffichageDigital(CapteurAbstrait c) {
+        capteur = c;
     }
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         nomCapteur.textProperty().bind(capteur.nomProperty());
         nomCapteur.setFont(new Font("Arial", 18));
         if (capteur instanceof Capteur) {
-            valeurCapteur.textProperty().bindBidirectional(capteur.valeurProperty(), new NumberStringConverter());
+            //valeurCapteur.textProperty().bindBidirectional(capteur.valeurProperty(), new NumberStringConverter());
+            valeurCapteur.textProperty().bind(capteur.valeurProperty().asString());
         }
         if (capteur instanceof CapteurComplexe) {
             valeurCapteur.textProperty().bind(capteur.valeurProperty().asString());

@@ -2,7 +2,7 @@ package class_Metier.generateur;
 
 import java.util.Random;
 
-public class GenerationAleatoireReelle implements GenerationValeurAbstrait {
+public class GenerationAleatoireReelle implements IGenerationValeur {
 
     private float valAvant;
     private int diff;

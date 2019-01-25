@@ -2,7 +2,7 @@ package class_Metier.generateur;
 
 import java.util.Random;
 
-public class GenerationAleatoireInfini implements GenerationValeurAbstrait {
+public class GenerationAleatoireInfini implements IGenerationValeur {
 
     private static final float MIN_POSSIBLE = -273.15f;
 

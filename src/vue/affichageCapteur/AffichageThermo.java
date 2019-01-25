@@ -11,10 +11,12 @@ public class AffichageThermo {
     private Slider thermoSlider;
 
     //Méthode appelée avant initialise()
-    public AffichageThermo(CapteurAbstrait c) { capteur=c; }
+    public AffichageThermo(CapteurAbstrait c) {
+        capteur = c;
+    }
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         thermoSlider.valueProperty().bind(capteur.valeurProperty());
     }
 }

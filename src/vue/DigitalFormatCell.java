@@ -2,6 +2,7 @@ package vue;
 
 import class_Metier.capteur.CapteurAbstrait;
 import javafx.scene.control.ListCell;
+
 import java.util.ArrayList;
 import java.util.List;
 

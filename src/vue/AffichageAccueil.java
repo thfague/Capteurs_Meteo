@@ -6,7 +6,7 @@ import class_Metier.capteur.CapteurComplexe;
 import class_Metier.generateur.GenerationAleatoireBorne;
 import class_Metier.generateur.GenerationAleatoireInfini;
 import class_Metier.generateur.GenerationAleatoireReelle;
-import class_Metier.generateur.GenerationValeurAbstrait;
+import class_Metier.generateur.IGenerationValeur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +32,7 @@ import vue.affichageCapteur.AffichageImgMeteo;
 import vue.affichageCapteur.AffichageThermo;
 import vue.configCapteur.AffichageConfigCapt;
 import vue.configCapteur.AffichageConfigCaptComp;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class AffichageAccueil {
     private Integer choixTypeCapteur;
 
     @FXML
-    private void initialize (){
+    private void initialize() {
 
         creationCapteur();
         creationComboCapteur();
@@ -64,11 +65,11 @@ public class AffichageAccueil {
         //Un peu de style
         gridAccueil.getStyleClass().add("grid");
         vbDroite.setAlignment(Pos.TOP_CENTER);
-        textCapteur.setFont(new Font("Arial",18));
+        textCapteur.setFont(new Font("Arial", 18));
     }
 
     private void creationComboCapteur() {
-        comboCapteur.getItems().addAll("capteur","capteurComplexe");
+        comboCapteur.getItems().addAll("capteur", "capteurComplexe");
         comboCapteur.getSelectionModel().selectFirst();
         comboCapteur.getSelectionModel().selectedItemProperty().addListener((change, oV, nV) -> {
             if (nV.equals("capteur")) {
@@ -87,7 +88,7 @@ public class AffichageAccueil {
             public void handle(ActionEvent actionEvent) {
                 switch (choixTypeCapteur) {
                     case 0:
-                        newWindow("configCapteur/affichageConfig.fxml", "Configuration", new Capteur(0,"", 1000, new GenerationAleatoireBorne(10,30)));
+                        newWindow("configCapteur/affichageConfig.fxml", "Configuration", new Capteur(0, "", 1000, new GenerationAleatoireBorne(10, 30)));
                         break;
                     case 1:
                         newWindow("configCapteur/affichageConfig.fxml", "Configuration", new CapteurComplexe(new HashMap<>(), ""));
@@ -109,16 +110,16 @@ public class AffichageAccueil {
             }
         });
 
-        listeVCapteur.getSelectionModel().selectedItemProperty().addListener((l,oV,nV)->{
+        listeVCapteur.getSelectionModel().selectedItemProperty().addListener((l, oV, nV) -> {
             vbDroite.getChildren().clear();
             vbDroite.getChildren().add(typeCapteur);
-            if(nV instanceof Capteur) {
+            if (nV instanceof Capteur) {
                 typeCapteur.setText("Type : Capteur");
             }
-            if(nV instanceof CapteurComplexe) {
+            if (nV instanceof CapteurComplexe) {
                 typeCapteur.setText("Type : CapteurComplexe");
             }
-            if(olCapteur.size() > 0) {
+            if (olCapteur.size() > 0) {
                 textCapteur.setText(nV.getNom());
                 boutonAffichage(nV, "Affichage digital", "affichageCapteur/affichageDigital.fxml", "Affichage format digital");
                 boutonAffichage(nV, "Affichage par thermomètre", "affichageCapteur/affichageThermo.fxml", "Affichage format thermomètre");
@@ -131,14 +132,11 @@ public class AffichageAccueil {
     }
 
     private void creationCapteur() {
-        GenerationValeurAbstrait g1;
-        GenerationValeurAbstrait g2;
-        GenerationValeurAbstrait g3;
-        listeCapteur.add(new Capteur(30, "capteur 1", 1000, g1 = new GenerationAleatoireBorne(10,20)));
-        listeCapteur.add(new Capteur(10, "capteur 2", 2000, g2 = new GenerationAleatoireInfini()));
-        listeCapteur.add(new Capteur(2, "capteur 3", 3000, g3 = new GenerationAleatoireReelle(0, 2)));
-        Map<CapteurAbstrait,Integer> mapCapteur = new HashMap<>();
-        CapteurComplexe capteurComplexe = new CapteurComplexe(mapCapteur,"CapteurComplexe 1");
+        listeCapteur.add(new Capteur(30, "capteur 1", 1000, new GenerationAleatoireBorne(10, 20)));
+        listeCapteur.add(new Capteur(10, "capteur 2", 2000, new GenerationAleatoireInfini()));
+        listeCapteur.add(new Capteur(2, "capteur 3", 3000, new GenerationAleatoireReelle(0, 2)));
+        Map<CapteurAbstrait, Integer> mapCapteur = new HashMap<>();
+        CapteurComplexe capteurComplexe = new CapteurComplexe(mapCapteur, "CapteurComplexe 1");
         capteurComplexe.ajoutCapteur(listeCapteur.get(0), 1);
         capteurComplexe.ajoutCapteur(listeCapteur.get(1), 2);
         capteurComplexe.ajoutCapteur(listeCapteur.get(2), 3);
@@ -161,32 +159,40 @@ public class AffichageAccueil {
             @Override
             public void handle(ActionEvent actionEvent) {
                 listeCapteur.remove(capteur);
-                for(CapteurAbstrait c : listeCapteur) {
-                    if(c instanceof CapteurComplexe){
-                        if(((CapteurComplexe) c).getListeCapteur().containsKey(capteur)){
+                for (CapteurAbstrait c : listeCapteur) {
+                    if (c instanceof CapteurComplexe) {
+                        if (((CapteurComplexe) c).getListeCapteur().containsKey(capteur)) {
                             ((CapteurComplexe) c).getListeCapteur().remove(capteur);
                         }
                     }
                 }
-                if(listeCapteur.size() == 0) {
+                if (listeCapteur.size() == 0) {
                     textCapteur.setText("");
                     vbDroite.getChildren().clear();
                 }
             }
         });
     }
-    
-    private void newWindow(String nomFichier, String titre, CapteurAbstrait capteur)
-    {
+
+    private void newWindow(String nomFichier, String titre, CapteurAbstrait capteur) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nomFichier));
             switch (nomFichier) {
-                case "affichageCapteur/affichageDigital.fxml": loader.setController(new AffichageDigital(capteur)); break;
-                case "affichageCapteur/affichageThermo.fxml": loader.setController(new AffichageThermo(capteur)); break;
-                case "affichageCapteur/affichageImgMeteo.fxml": loader.setController(new AffichageImgMeteo(capteur)); break;
+                case "affichageCapteur/affichageDigital.fxml":
+                    loader.setController(new AffichageDigital(capteur));
+                    break;
+                case "affichageCapteur/affichageThermo.fxml":
+                    loader.setController(new AffichageThermo(capteur));
+                    break;
+                case "affichageCapteur/affichageImgMeteo.fxml":
+                    loader.setController(new AffichageImgMeteo(capteur));
+                    break;
                 case "configCapteur/affichageConfig.fxml":
-                    if(capteur instanceof CapteurComplexe) { loader.setController(new AffichageConfigCaptComp((CapteurComplexe) capteur, olCapteur)); }
-                    else { loader.setController(new AffichageConfigCapt((Capteur) capteur, olCapteur)); }
+                    if (capteur instanceof CapteurComplexe) {
+                        loader.setController(new AffichageConfigCaptComp((CapteurComplexe) capteur, olCapteur));
+                    } else {
+                        loader.setController(new AffichageConfigCapt((Capteur) capteur, olCapteur));
+                    }
                     break;
             }
             Parent root = loader.load();
@@ -196,8 +202,7 @@ public class AffichageAccueil {
             stage.setScene(new Scene(root, 500, 400));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

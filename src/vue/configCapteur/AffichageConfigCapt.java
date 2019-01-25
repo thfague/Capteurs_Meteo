@@ -6,10 +6,7 @@ import class_Metier.capteur.CapteurComplexe;
 import class_Metier.generateur.GenerationAleatoireBorne;
 import class_Metier.generateur.GenerationAleatoireInfini;
 import class_Metier.generateur.GenerationAleatoireReelle;
-import class_Metier.generateur.GenerationValeurAbstrait;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -17,10 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.util.List;
-
-import static java.sql.Types.NULL;
 
 public class AffichageConfigCapt {
     @FXML
@@ -43,15 +36,15 @@ public class AffichageConfigCapt {
     private Integer choixGenerateur;
 
     //Méthode appelée avant initialise()
-    public AffichageConfigCapt(Capteur  c, ObservableList<CapteurAbstrait> l){
-        capteur=c;
+    public AffichageConfigCapt(Capteur c, ObservableList<CapteurAbstrait> l) {
+        capteur = c;
         listeTotalCapteur = l;
     }
 
     @FXML
     private void initialize() {
         tps = new Text("Temps de changement (en seconde) : ");
-        SpinnerValueFactory<Integer> valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20,capteur.getTpsChangement()/1000);
+        SpinnerValueFactory<Integer> valSpinner = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, capteur.getTpsChangement() / 1000);
         tpsSpinner.setValueFactory(valSpinner);
 
         comboGenerateur.getItems().addAll("Generation Aleatoire Borne", "Generation Aleatoire Reelle", "Generation Aleatoire Infini");
@@ -66,7 +59,7 @@ public class AffichageConfigCapt {
 
         reinit("");
 
-        gridConfig.add(vb,0,0);
+        gridConfig.add(vb, 0, 0);
         gridConfig.add(vbOptionGenerateur, 0, 1);
     }
 
@@ -90,8 +83,7 @@ public class AffichageConfigCapt {
         }));
     }
 
-    private void affichageCapteur()
-    {
+    private void affichageCapteur() {
         vb.getChildren().clear();
         vbOptionGenerateur.getChildren().clear();
 
@@ -125,8 +117,7 @@ public class AffichageConfigCapt {
         affichageGenerateur();
     }
 
-    private void affichageGenerateur()
-    {
+    private void affichageGenerateur() {
         vbOptionGenerateur.getChildren().clear();
         vbOptionGenerateur.getChildren().add(min);
         vbOptionGenerateur.getChildren().add(minTF);
@@ -136,72 +127,74 @@ public class AffichageConfigCapt {
     }
 
     private void validationCapteur() {
-        for(int i = 0; i < listeTotalCapteur.size(); i++) {
-            if(nomCaptTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
-                if(!nomCaptTF.getText().equals(capteur.getNom())) {
+        for (int i = 0; i < listeTotalCapteur.size(); i++) {
+            if (nomCaptTF.getText().equals(listeTotalCapteur.get(i).getNom())) {
+                if (!nomCaptTF.getText().equals(capteur.getNom())) {
                     reinit("Nom de capteur déjà pris");
                     return;
                 }
             }
         }
-        if(nomCaptTF.getText().equals("")) {
+        if (nomCaptTF.getText().equals("")) {
             reinit("Un capteur doit avoir un nom");
             return;
         }
-        GenerationValeurAbstrait g;
-        if(choixGenerateur == 1) {
-            if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
+        if (choixGenerateur == 1) {
+            if (minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
                 reinit("Les valeurs minimum et maximum doivent être renseignées");
                 return;
             }
             int valMin = Integer.parseInt(minTF.getText());
             int valMax = Integer.parseInt(maxTF.getText());
-            if(valMin >= valMax) {
+            if (valMin >= valMax) {
                 reinit("La valeur minimum doit être inférieur à la valeur maximum");
                 return;
             }
-            g = new GenerationAleatoireBorne(valMin, valMax);
-        }
-        else if(choixGenerateur == 2) {
-            if(minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
+            if (listeTotalCapteur.contains(capteur)) {
+                listeTotalCapteur.remove(capteur);
+            }
+            Capteur ca = new Capteur(0, nomCaptTF.getText(), tpsSpinner.getValue() * 1000, new GenerationAleatoireBorne(valMin, valMax));
+            listeTotalCapteur.add(ca);
+        } else if (choixGenerateur == 2) {
+            if (minTF.getText().trim().isEmpty() || maxTF.getText().trim().isEmpty()) {
                 reinit("La valeur de départ et la valeur de différence doivent être renseignées");
                 return;
             }
             int valMin = Integer.parseInt(minTF.getText());
             int valMax = Integer.parseInt(maxTF.getText());
-            g = new GenerationAleatoireReelle(valMin, valMax);
-        }
-        else {
-            g = new GenerationAleatoireInfini();
-        }
-        if(listeTotalCapteur.contains(capteur)) {
-            listeTotalCapteur.remove(capteur);
-
-        }
-        Capteur ca = new Capteur(0, nomCaptTF.getText(),tpsSpinner.getValue()*1000, g);
-        listeTotalCapteur.add(ca);
-        for(CapteurAbstrait c : listeTotalCapteur) {
-            if(c instanceof CapteurComplexe){
-                if(((CapteurComplexe) c).getListeCapteur().containsKey(capteur)){
-                    ((CapteurComplexe) c).getListeCapteur().remove(capteur);
-                    ((CapteurComplexe) c).ajoutCapteur(ca, 1);
-                }
+            if (listeTotalCapteur.contains(capteur)) {
+                listeTotalCapteur.remove(capteur);
             }
+            Capteur ca = new Capteur(0, nomCaptTF.getText(), tpsSpinner.getValue() * 1000, new GenerationAleatoireReelle(valMin, valMax));
+            listeTotalCapteur.add(ca);
+            configCapteur(ca);
+        } else {
+            if (listeTotalCapteur.contains(capteur)) {
+                listeTotalCapteur.remove(capteur);
+            }
+            Capteur ca = new Capteur(0, nomCaptTF.getText(), tpsSpinner.getValue() * 1000, new GenerationAleatoireInfini());
+            listeTotalCapteur.add(ca);
+            configCapteur(ca);
         }
+
 
         Stage stage = (Stage) validation.getScene().getWindow();
         stage.close();
     }
 
+    private void configCapteur(Capteur ca) {
+        for (CapteurAbstrait c : listeTotalCapteur) {
+            if (c instanceof CapteurComplexe) {
+                if (((CapteurComplexe) c).getListeCapteur().containsKey(capteur)) {
+                    ((CapteurComplexe) c).getListeCapteur().remove(capteur);
+                    ((CapteurComplexe) c).ajoutCapteur(ca, 1);
+                }
+            }
+        }
+    }
+
     private void reinit(String messageErreur) {
-        if(capteur.getNom().equals("")) {
-            nomCapt.setText("Nom du capteur :");
-            nomCaptTF.setText("");
-        }
-        else {
-            nomCapt.setText(capteur.getNom());
-            nomCaptTF.setText(capteur.getNom());
-        }
+        AffichageConfigCaptComp.reinit(capteur.getNom(), nomCapt, nomCaptTF);
         nomCapt.setFont(new Font("Arial", 18));
         affichageCapteur();
         comboGenerateur.getSelectionModel().selectFirst();

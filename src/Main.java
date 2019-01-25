@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("vue/accueil.fxml"));
         primaryStage.setTitle("Meteo");
         Scene s = new Scene(root, 410, 350);
@@ -16,5 +16,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) { launch(args); }
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

@@ -6,13 +6,17 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
-      <Circle fill="#687078" layoutX="300.0" layoutY="75.0" radius="27.0" stroke="#687078" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#687078" height="162.0" layoutX="273.0" layoutY="75.0" stroke="#687078" strokeLineJoin="BEVEL" strokeMiterLimit="1.0" strokeType="INSIDE" width="54.0" />
-      <Circle cache="true" cacheHint="SCALE" fill="#687078" layoutX="300.0" layoutY="281.0" radius="53.0" stroke="#687078" strokeType="INSIDE">
-         <effect>
-            <Reflection />
-         </effect>
-      </Circle>
-      <Slider fx:id="thermoSlider" layoutX="293.0" layoutY="53.0" orientation="VERTICAL" prefHeight="276.0" prefWidth="14.0" />
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <Circle fill="#687078" layoutX="300.0" layoutY="75.0" radius="27.0" stroke="#687078"/>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#687078" height="162.0" layoutX="273.0" layoutY="75.0"
+               stroke="#687078" strokeLineJoin="BEVEL" strokeMiterLimit="1.0" strokeType="INSIDE" width="54.0"/>
+    <Circle cache="true" cacheHint="SCALE" fill="#687078" layoutX="300.0" layoutY="281.0" radius="53.0" stroke="#687078"
+            strokeType="INSIDE">
+        <effect>
+            <Reflection/>
+        </effect>
+    </Circle>
+    <Slider fx:id="thermoSlider" layoutX="293.0" layoutY="53.0" orientation="VERTICAL" prefHeight="276.0"
+            prefWidth="14.0"/>
 </AnchorPane>

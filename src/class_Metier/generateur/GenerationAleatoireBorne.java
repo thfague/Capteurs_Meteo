@@ -2,7 +2,7 @@ package class_Metier.generateur;
 
 import java.util.Random;
 
-public class GenerationAleatoireBorne implements GenerationValeurAbstrait {
+public class GenerationAleatoireBorne implements IGenerationValeur {
 
     private int min;
     private int max;

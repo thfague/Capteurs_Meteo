@@ -6,25 +6,27 @@ public class CapteurComplexe extends CapteurAbstrait implements Observer {
 
     private Map<CapteurAbstrait, Integer> listeCapteur;
 
+
     public CapteurComplexe(Map<CapteurAbstrait, Integer> m, String nom) {
         super(0f, nom);
         this.listeCapteur = m;
         this.setValeur(calculValeur());
     }
 
-    public Map<CapteurAbstrait,Integer> getListeCapteur() { return listeCapteur; }
+    public Map<CapteurAbstrait, Integer> getListeCapteur() {
+        return listeCapteur;
+    }
 
     //Méthode qui czlcul lé valeur du capteur ccmplexe en prenant en compte tous les capteurs liés et keur coefficient
     private float calculValeur() {
         float sommeCoeff = 0f;
         float valeur = 0f;
-        if(listeCapteur.size() == 0) {
+        if (listeCapteur.size() == 0) {
             return valeur;
-        }
-        else {
+        } else {
             Set<Map.Entry<CapteurAbstrait, Integer>> setListeCapteur = this.listeCapteur.entrySet();
             Iterator<Map.Entry<CapteurAbstrait, Integer>> it = setListeCapteur.iterator();
-            for (Map.Entry<CapteurAbstrait, Integer> m: setListeCapteur) {
+            for (Map.Entry<CapteurAbstrait, Integer> m : setListeCapteur) {
                 sommeCoeff = sommeCoeff + m.getValue();
                 valeur = valeur + m.getKey().getValeur() * m.getValue();
             }

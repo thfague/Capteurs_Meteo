@@ -4,9 +4,10 @@ import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 import java.util.Observable;
 
-public abstract class  CapteurAbstrait extends Observable {
+public abstract class CapteurAbstrait extends Observable {
 
     private FloatProperty valeur = new SimpleFloatProperty();
     private StringProperty nom = new SimpleStringProperty();
@@ -16,11 +17,29 @@ public abstract class  CapteurAbstrait extends Observable {
         this.valeur.setValue(valeur);
     }
 
-    public float getValeur() { return this.valeur.get(); }
-    public void setValeur(float valeur) { this.valeur.set(valeur); setChanged(); notifyObservers(); }
-    public FloatProperty valeurProperty() { return this.valeur; }
+    public float getValeur() {
+        return this.valeur.get();
+    }
 
-    public String getNom() { return this.nom.get(); }
-    public void setNom(String nom) { this.nom.set(nom); }
-    public StringProperty nomProperty() { return nom; }
+    public void setValeur(float valeur) {
+        this.valeur.set(valeur);
+        setChanged();
+        notifyObservers();
+    }
+
+    public FloatProperty valeurProperty() {
+        return this.valeur;
+    }
+
+    public String getNom() {
+        return this.nom.get();
+    }
+
+    public void setNom(String nom) {
+        this.nom.set(nom);
+    }
+
+    public StringProperty nomProperty() {
+        return nom;
+    }
 }

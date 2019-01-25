@@ -1,5 +1,5 @@
 package class_Metier.generateur;
 
-public interface GenerationValeurAbstrait {
+public interface IGenerationValeur {
     float generer();
 }
