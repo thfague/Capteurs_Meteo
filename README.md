@@ -13,5 +13,5 @@ Tous les capteurs effectuent leur tâche en parallèle.
 Chaque capteur possède son algorithme de génération de valeur (qui pourra être modifié au cours du programme).
 
 Il existe aussi des capteurs plus complexes dont la valeur dépend des autres capteurs auquels il est lié. 
-Un capteur complexe C connaît différent capteurs(peu importe leur type)
+Un capteur complexe connaît différent capteurs(peu importe leur type)
 On veut visualiser ces capteurs sous forme hiérarchique et pouvoir continuer à les configurer comme avant.
